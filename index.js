@@ -22,7 +22,7 @@ app.use("/api/categories", cateRoute);
 app.use("/api/products", proRoute);
 app.use("/api/orders", orderRoute);
 app.get("/",(req, res)=>{
-  res.send("ahihi 123")
+  res.send("ahihi 1234")
 })
 
 
