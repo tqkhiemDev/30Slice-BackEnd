@@ -37,7 +37,7 @@ router.post("/", async (req, res) => {
 router.put("/", async (req, res) => {
   try {
     const updatedCategory = await Categories.findByIdAndUpdate(
-      req.body.id,
+      req.body._id,
       { $set: req.body },
       { new: true }
     );
