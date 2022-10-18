@@ -7,9 +7,8 @@ const app = exp();
 const Mailjet = require('node-mailjet');
 dotenv.config();
 
-const cateRoute = require("./routes/categories");
-const proRoute = require("./routes/products");
-const orderRoute = require("./routes/order");
+const loginRoute = require("./routes/login");
+
 
 
 const mailjet = new Mailjet({
@@ -23,9 +22,8 @@ app.use(cors());
 app.use(exp.json());
 
 
-app.use("/api/categories", cateRoute);
-app.use("/api/products", proRoute);
-app.use("/api/orders", orderRoute);
+app.use("/api/users", loginRoute);
+
 app.get("/",(req, res)=>{
   res.send("ahihi 1234")
 })
