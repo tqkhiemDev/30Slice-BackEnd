@@ -7,7 +7,7 @@ const LoginSchema = new mongoose.Schema(
         Full_Name: { type: String, required: true },
         Email: { type: String, required: true, unique: true },
         Phone: { type: String, required: true, unique: true },
-        Role: { type: String, default: "user" },
+        Role: { type: String, default: "customer" },
     },
     { timestamps: true }
 );

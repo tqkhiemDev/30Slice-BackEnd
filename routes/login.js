@@ -1,11 +1,21 @@
 const Login = require("../models/Login");
-const Style_List = require("../models/style_list");
+const Style_List = require("../models/Style_list");
+const Customer = require("../models/Customer");
+
 
 const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 const fs = require('fs');
 const PRIVATE_KEY = fs.readFileSync('./private-key.txt');
-
+function makeid(length) {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
 
 router.post("/login", async (req, res) => {
   try {
@@ -57,6 +67,32 @@ router.post("/register", async (req, res) => {
 
     res.status(200).json(user);
 
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+// customer register
+router.post("/register/customer", async (req, res) => {
+  try {
+    const newUser = new Login({
+      Username: makeid(15),
+      Password: makeid(20),
+      Email: `${makeid(10)}@gmail.com`,
+      Full_Name: req.body.full_name,
+      Phone: req.body.phone,
+    });
+    const user = await newUser.save();
+    const newCustomer = new Customer({
+      Id_User: user._id,
+    });
+    const customer = await newCustomer.save();
+    let respon = {
+      Id_User: user._id,
+      Full_Name: user.Full_Name,
+      Phone: user.Phone,
+      Role: user.Role,
+    }
+    res.status(200).json(respon);
   } catch (err) {
     res.status(500).json(err);
   }
