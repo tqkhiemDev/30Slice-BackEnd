@@ -4,8 +4,8 @@ const CustomerSchema = new mongoose.Schema(
     {
         Id_User: { type: String, required: true, unique: true },
         History: { type: Array },
-        Style_List_Favorite: { type: String },
-        Schedule: { type: String },
+        Style_List_Favorite: { type: String, default: null},
+        Schedule: { type: String, default: null },
         Block_By_Admin: { type: Number, required: true, default: 1 },
     },
     { timestamps: true }
