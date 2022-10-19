@@ -1,5 +1,5 @@
 const Login = require("../models/Login");
-const Style_List = require("../models/Style_list");
+const Style_List = require("../models/Style_List");
 const Customer = require("../models/Customer");
 
 
