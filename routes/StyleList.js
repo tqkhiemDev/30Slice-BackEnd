@@ -1,6 +1,4 @@
 const Login = require("../models/Login");
-const Style_List = require("../models/Style_List");
-
 const router = require("express").Router();
 
 
