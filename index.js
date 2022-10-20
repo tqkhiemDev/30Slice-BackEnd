@@ -9,6 +9,8 @@ dotenv.config();
 
 const loginRoute = require("./routes/login");
 const categoryRoute = require("./routes/category");
+const serviceRoute = require("./routes/service");
+
 
 const mailjet = new Mailjet({
   apiKey: process.env.MJ_APIKEY_PUBLIC || "",
@@ -25,6 +27,7 @@ app.use(exp.json());
 
 app.use("/api/users", loginRoute);
 app.use("/api/category", categoryRoute);
+app.use("/api/services", serviceRoute);
 
 app.get("/", (req, res) => {
   res.send("ahihi 1234");
