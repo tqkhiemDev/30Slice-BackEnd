@@ -25,7 +25,7 @@ router.post("/addService", async (req, res) => {
 router.delete("/deleteService/", async (req, res) => {
     try {
         const deletedService = await Service.findByIdAndDelete(req.body._id);
-        res.status(200).json({ message: "Xoá Dịch Vụ Thành Công!", status_code: 200 });
+        res.status(200).json({ "message": "Xoá Dịch Vụ Thành Công!", "status_code": 200 });
     } catch (err) {
         res.status(400).json(err);
     }
