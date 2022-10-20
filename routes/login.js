@@ -51,7 +51,6 @@ router.post("/register", async (req, res) => {
     const user = await newUser.save();
     switch (req.body.role) {
       case "styleList":
-
         const newStyle_List = new Style_List({
           Id_User: user._id,
           Shifts: [],
@@ -97,24 +96,7 @@ router.post("/register/customer", async (req, res) => {
     res.status(500).json(err);
   }
 });
-// get all data from login table and style_list table inner join by id_user
-router.get("/getall", async (req, res) => {
-  try {
-    const user = await Login.aggregate([
-      {
-        $lookup: {
-          from: "style_lists",
-          localField: "_id",
-          foreignField: "Id_User",
-          as: "style_list",
-        },
-      },
-    ]);
-    res.status(200).json(user);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+
 
 
 
