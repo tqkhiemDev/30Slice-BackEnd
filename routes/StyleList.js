@@ -22,6 +22,9 @@ router.get("/gettAllStyleList", async (req, res) => {
         }
       },
       {
+        $unwind: "$Info"
+      },
+      {
         $project: {
           "Password": 0,
           "__v": 0,
