@@ -29,7 +29,7 @@ app.use(exp.json());
 app.use("/api/users", loginRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/services", serviceRoute);
-app.use("/api/styleList", styleListRoute);
+app.use("/api/stylelist", styleListRoute);
 
 app.get("/", (req, res) => {
   res.send("ahihi 1234");
