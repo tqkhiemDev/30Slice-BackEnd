@@ -4,12 +4,12 @@ const router = require("express").Router();
 
 //get all service
 router.get("/", async (req, res) => {
-  try {
-    const getservices = await Service.find();
-    res.status(200).json(getservices);
-  } catch (err) {
-    res.status(400).json(err);
-  }
+    try {
+        const getservices = await Service.find();
+        res.status(200).json(getservices);
+    } catch (err) {
+        res.status(400).json(err);
+    }
 });
 // add new service
 router.post("/addService", async (req, res) => {
@@ -25,7 +25,7 @@ router.post("/addService", async (req, res) => {
 router.delete("/deleteService/", async (req, res) => {
     try {
         const deletedService = await Service.findByIdAndDelete(req.body._id);
-        res.status(200).json("delete success!!");
+        res.status(200).json({ message: "Xoá Dịch Vụ Thành Công!", status_code: 200 });
     } catch (err) {
         res.status(400).json(err);
     }
