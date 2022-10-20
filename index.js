@@ -10,7 +10,7 @@ dotenv.config();
 const loginRoute = require("./routes/login");
 const categoryRoute = require("./routes/category");
 const serviceRoute = require("./routes/service");
-const styleListRoute = require("./routes/styleList");
+const styleListRoute = require("./routes/stylelist");
 
 
 const mailjet = new Mailjet({
