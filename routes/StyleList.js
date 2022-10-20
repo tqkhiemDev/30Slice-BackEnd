@@ -21,40 +21,39 @@ router.get("/getAllStyleList", async (req, res) => {
 })
 
 
-router.get("/",async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const arrStyleList = await Style_List.find();
-    const arrInfoUser = await Login.find({Role: "styleList"});
+    const arrInfoUser = await Login.find({ Role: "styleList" });
 
     const data = arrStyleList.map(item => {
       const index = arrInfoUser.findIndex(ele => ele._id.toString() === item.Id_User);
       return { ...item._doc, ...arrInfoUser[index]._doc }
     })
-    const { Password , ...other} = data
+    const { Password, ...other } = data
 
     res.status(200).json(other);
   } catch (err) {
     res.status(400).json(err);
   }
 })
+
 // join stylelist data with login data using lookup
 router.get("/lookup", async (req, res) => {
   try {
-    const data = await Style_List.aggregate([
-      {
-        $lookup: {
-          from: "logins",
-          localField: "Id_User",
-          foreignField: "_id",
-          as: "user",
-        },
-      }
-    ]);
-    res.status(200).json(data);
+
+    const data = await Style_List.find().populate('Id_User').exec((err, docs) => {
+      if (err) { throw err; }
+      res.status(200).json(docs);
+      
+    });
+
   } catch (err) {
     res.status(400).json(err);
   }
 });
+
+
 
 
 module.exports = router;

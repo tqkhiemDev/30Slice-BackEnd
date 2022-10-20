@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Style_ListSchema = new mongoose.Schema(
     {
-        Id_User: { type: String, required: true, unique: true },
+        Id_User: { type: mongoose.Schema.Types.ObjectId, ref: 'login' },
         Shifts: { type: Array, required: true },
         Status_Code: { type: Number, required: true, default: 0 },
         Status: { type: String, required: true, default: "active" },
