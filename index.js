@@ -10,6 +10,7 @@ dotenv.config();
 const loginRoute = require("./routes/login");
 const categoryRoute = require("./routes/category");
 const serviceRoute = require("./routes/service");
+const styleListRoute = require("./routes/styleList");
 
 
 const mailjet = new Mailjet({
@@ -28,6 +29,7 @@ app.use(exp.json());
 app.use("/api/users", loginRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/services", serviceRoute);
+app.use("/api/styleList", styleListRoute);
 
 app.get("/", (req, res) => {
   res.send("ahihi 1234");
