@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const CustomerSchema = new mongoose.Schema(
     {
-        Id_User: { type: String, required: true, unique: true },
+        Id_User: { type: mongoose.Schema.Types.ObjectId, ref: 'login' },
         History: { type: Array },
         Style_List_Favorite: { type: String, default: null},
         Schedule: { type: String, default: null },
