@@ -32,7 +32,7 @@ app.use("/api/users", loginRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/services", serviceRoute);
 app.use("/api/stylelist", styleListRoute);
-app.use("/api/product", productRoute);
+app.use("/api/products", productRoute);
 app.use("/api/news", newsRoute);
 
 app.get("/", (req, res) => {
