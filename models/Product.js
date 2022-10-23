@@ -4,9 +4,9 @@ const ProductSchema = new mongoose.Schema(
   {
     Name: { type: String, required: true },
     Price: { type: Number, required: true },
-    Saled: { type: Number },
-    Id_Categories: { type: String, required: true },
-    Descibe: { type: String },
+    Saled: { type: Number,default:0 },
+    Id_Categories: { type: mongoose.Schema.Types.ObjectId, ref: 'categories' },
+    Describe: { type: String },
     Images: { type: Array, required: true },
     InStock: { type: Number, required: true },
     Is_Show: { type: Boolean, default: true },
