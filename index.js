@@ -12,6 +12,7 @@ const categoryRoute = require("./routes/category");
 const serviceRoute = require("./routes/service");
 const styleListRoute = require("./routes/stylelist");
 const productRoute = require("./routes/product");
+const newsRoute = require("./routes/news");
 
 
 const mailjet = new Mailjet({
@@ -32,6 +33,7 @@ app.use("/api/category", categoryRoute);
 app.use("/api/services", serviceRoute);
 app.use("/api/stylelist", styleListRoute);
 app.use("/api/product", productRoute);
+app.use("/api/news", newsRoute);
 
 app.get("/", (req, res) => {
   res.send("ahihi 1234");
