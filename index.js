@@ -33,7 +33,7 @@ app.use("/api/category", categoryRoute);
 app.use("/api/services", serviceRoute);
 app.use("/api/stylelist", styleListRoute);
 app.use("/api/product", productRoute);
-app.use("/api/news", newsRoute);
+app.use("/api/news", ndewsRoute);
 
 app.get("/", (req, res) => {
   res.send("ahihi 1234");

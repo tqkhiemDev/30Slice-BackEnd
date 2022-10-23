@@ -25,13 +25,13 @@ router.get("/getNewsByCategory/:id", async (req, res) => {
 
 //show 1
 router.get("/getOneNews/:id", async (req, res) => {
-    try {
-      const news = await News.findById(req.params.id)
-      res.status(200).json(news);
-    } catch (err) {
-      res.status(400).json(err);
-    }
-  });
+  try {
+    const news = await News.findById(req.params.id);
+    res.status(200).json(news);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
 
 //them
 router.post("/", async (req, res) => {
