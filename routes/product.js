@@ -73,15 +73,32 @@ router.get("/getOneProduct/:id", async (req, res) => {
     res.status(400).json(err);
   }
 });
-// get product by page and limit
-router.get("/getProducts", async (req, res) => {
-  const page = req.query.page;
-  const limit = req.query.limit;
+// get product by page and limit and return total page
+router.get("/getProductsByPageAndLimit/:page/:limit", async (req, res) => {
+  const page = req.params.page;
+  const limit = req.params.limit;
   try {
     const products = await Product.find()
       .skip((page - 1) * limit)
       .limit(limit * 1);
-    res.status(200).json(products);
+    const totalPage = await Product.countDocuments();
+    res.status(200).json({ products, totalPage });
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
+router.get("/getProducts", async (req, res) => {
+  const page = req.query.page;
+  const limit = req.query.limit;
+  const totalItem = await Product.countDocuments();
+  const totalPage = Math.ceil(totalItem / limit);
+  try {
+    const products = await Product.find()
+      .skip((page - 1) * limit)
+      .limit(limit * 1);
+    res.status(200).json({ products, totalPage });
+
   } catch (err) {
     res.status(400).json(err);
   }
