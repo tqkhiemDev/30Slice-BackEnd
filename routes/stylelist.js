@@ -70,22 +70,11 @@ router.post("/addShiftToStyleList", async (req, res) => {
   }
 })
 
-const getAvailableEmployee = (bookedDate, bookedTime) => {
-  if (!arrBookedData[bookedDate]) {
-    arrBookedData[bookedDate] = new Array(allAvailableTime.length).fill([])
-  }
-  const arrBookedEmployee = arrBookedData[bookedDate][bookedTime]
-  return arrEmployee.filter(employee => {
-    return arrBookedEmployee.findIndex(booking => {
-      return booking.employee.employeeID === employee.employeeID
-    }) === -1
-  })
-}
 router.get('/getAvailableEmployee', async (req, res) => {
   const bookedDate = req.query.bookedDate
   try {
     const arrBooked = await Booking.find({ BookedDate: bookedDate });
-    const arrStyle_lists = await Login.aggregate([
+    const arrStylelist = await Login.aggregate([
       {
         $lookup: {
           from: "style_lists",
@@ -113,33 +102,20 @@ router.get('/getAvailableEmployee', async (req, res) => {
         }
       }
     ])
-    // get all stylelist if arrStyle_lists._id == arrBooked.Id_Style_List and arrBooked.BookedTime === arrStyle_lists.Info.Shifts then remove that bookedtime from arrStyle_lists.Info.Shifts 
-    // arrBooked.forEach(booked => {
-    // arrStyle_lists.forEach(style_list => {
-    //     if (booked.Id_Style_List.toString == style_list._id.toString) {
-    //       style_list.Info.Shifts = style_list.Info.Shifts.filter(shift => {
-    //         return shift !== booked.BookedTime
-    //       })
-    //     }
-    //   })
-    // }
-    // )
-    // get all stylelist if arrStyle_lists._id == arrBooked.Id_Style_List and arrBooked.BookedTime === arrStyle_lists.Info.Shifts then remove that bookedtime from arrStyle_lists.Info.Shifts optimize
-    arrBooked.forEach(booked => {
-      const index = arrStyle_lists.findIndex(style_list => {
-        return style_list._id.toString() === booked.Id_Style_List.toString()
+    if (arrBooked.length !== 0) {
+      let bookedData = {}
+      arrBooked.forEach(booking => {
+        if (!bookedData[booking.Id_Style_List])
+          bookedData[booking.Id_Style_List] = {}
+        bookedData[booking.Id_Style_List][booking.BookedTime] = true
       })
-      if (index !== -1) {
-        arrStyle_lists[index].Info.Shifts = arrStyle_lists[index].Info.Shifts.filter(shift => {
-          return shift !== booked.BookedTime
-        })
-      }
-    })
-
-
-
-    res.status(200).json(arrStyle_lists);
-
+      arrStylelist.forEach(stylelist => {
+        let _id = stylelist._id.toString()
+        if (bookedData[_id])
+          stylelist.Info.Shifts = stylelist.Info.Shifts.filter(shift => !bookedData[_id][shift])
+      })
+    }
+    res.status(200).json(arrStylelist)
   } catch (err) {
     res.status(400).json(err);
   }
