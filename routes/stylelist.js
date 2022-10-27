@@ -115,8 +115,7 @@ router.get('/getAvailableEmployee', async (req, res) => {
     ])
     // get all stylelist if arrStyle_lists._id == arrBooked.Id_Style_List and arrBooked.BookedTime === arrStyle_lists.Info.Shifts then remove that bookedtime from arrStyle_lists.Info.Shifts
     arrStyle_lists.forEach(style_list => {
-    arrBooked.forEach(booked => {
-      console.log(booked)
+      arrBooked.forEach(booked => {
         if (booked.Id_Style_List.toString == style_list._id.toString) {
           style_list.Info.Shifts = style_list.Info.Shifts.filter(shift => {
             console.log(shift, booked.BookedTime)
