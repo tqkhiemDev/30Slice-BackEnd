@@ -89,13 +89,26 @@ router.post("/register/customer", async (req, res) => {
       Id_User: user._id,
       Full_Name: user.Full_Name,
       Phone: user.Phone,
-      Role: user.Role,
     }
     res.status(200).json(respon);
   } catch (err) {
     res.status(500).json(err);
   }
 });
+// login by customer
+router.post("/login/customer", async (req, res) => {
+  try {
+    const user = await Login.findOne({ Phone: req.body.phone });
+    if (user) {
+      res.status(200).json({ Id_User: user._id, Full_Name: user.Full_Name, Phone: user.Phone });
+    }else{
+      res.status(401).json({ "message": "Số điện thoại này chưa đăng ký", "status_code": 404 });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 
 
 
