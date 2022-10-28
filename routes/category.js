@@ -1,9 +1,9 @@
-const Categories = require("../models/Categories");
+const Categories = require('../models/Categories');
 
-const router = require("express").Router();
+const router = require('express').Router();
 
 //show
-router.get("/getAllCategories", async (req, res) => {
+router.get('/getAllCategories', async (req, res) => {
   try {
     const categories = await Categories.find();
     res.status(200).json(categories);
@@ -13,7 +13,7 @@ router.get("/getAllCategories", async (req, res) => {
 });
 
 //show 1
-router.get("/getOneCategory/:id", async (req, res) => {
+router.get('/getOneCategory/:id', async (req, res) => {
   try {
     const category = await Categories.findById(req.params.id);
     res.status(200).json(category);
@@ -23,7 +23,7 @@ router.get("/getOneCategory/:id", async (req, res) => {
 });
 
 //them
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   const newCategories = new Categories(req.body);
   try {
     const savedCategories = await newCategories.save();
@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
 });
 
 //sua
-router.put("/", async (req, res) => {
+router.put('/', async (req, res) => {
   try {
     const updatedCategory = await Categories.findByIdAndUpdate(
       req.body._id,
@@ -48,13 +48,13 @@ router.put("/", async (req, res) => {
 });
 
 //toggle isShow
-router.put("/changeHideOrShow", async (req, res) => {
+router.put('/changeHideOrShow', async (req, res) => {
   try {
     const updatedCategory = await Categories.findOneAndUpdate(
       { _id: req.body._id },
       { Is_Show: req.body.Is_Show }
     );
-    res.status(200).json("change success!!");
+    res.status(200).json('change success!!');
   } catch (err) {
     res.status(400).json(err);
   }
