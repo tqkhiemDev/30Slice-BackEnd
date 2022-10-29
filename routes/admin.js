@@ -150,22 +150,21 @@ router.post('/forgot-password', async (req, res) => {
                 Name: user.Full_Name,
               },
             ],
+            Variables: {
+              name: `${user.Full_Name}`,
+              link: `https://admin.30slice.com/reset-password/${accessToken}`,
+            },
+            TemplateID: 4318212,
+            TemplateLanguage: true,
             Subject: '30slice - Khôi phục mật khẩu',
-            TextPart: 'Khôi phục mật khẩu',
-            HTMLPart: `<h3>Chào ${user.Full_Name},</h3>
-            <p>Bạn vừa yêu cầu khôi phục mật khẩu tại 30slice. Vui lòng click vào link bên dưới để tiếp tục.</p>
-            <a href="https://30slice.com/reset-password/${accessToken}">Khôi phục mật khẩu</a>
-            <p>Nếu bạn không yêu cầu khôi phục mật khẩu, vui lòng bỏ qua email này.</p>
-            <p>Trân trọng,</p>
-            <p>30slice</p>`,
-            CustomID: 'AppGettingStartedTest',
+            
           },
         ],
       });
       console.log(request.body);
       if (request.body.Messages[0].Status === 'success') {
         res.status(200).json({ message: 'Gửi email thành công' });
-      }else {
+      } else {
         res.status(400).json({ message: 'Gửi email thất bại' });
       }
     } else {
@@ -174,6 +173,7 @@ router.post('/forgot-password', async (req, res) => {
         .json({ message: 'Email không tồn tại.', status_code: 401 });
     }
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 });
