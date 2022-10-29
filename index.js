@@ -13,6 +13,7 @@ const serviceRoute = require("./routes/service");
 const styleListRoute = require("./routes/stylelist");
 const productRoute = require("./routes/product");
 const newsRoute = require("./routes/news");
+const orderRoute = require("./routes/order");
 
 
 const mailjet = new Mailjet({
@@ -33,7 +34,8 @@ app.use("/api/category", categoryRoute);
 app.use("/api/services", serviceRoute);
 app.use("/api/stylelist", styleListRoute);
 app.use("/api/product", productRoute);
-app.use("/api/news", ndewsRoute);
+app.use("/api/news", newsRoute);
+app.use("/api/order", orderRoute);
 
 app.get("/", (req, res) => {
   res.send("ahihi 1234");
