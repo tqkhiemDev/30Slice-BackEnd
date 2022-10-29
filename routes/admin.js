@@ -165,6 +165,8 @@ router.post('/forgot-password', async (req, res) => {
       console.log(request.body);
       if (request.body.Messages[0].Status === 'success') {
         res.status(200).json({ message: 'Gửi email thành công' });
+      }else {
+        res.status(400).json({ message: 'Gửi email thất bại' });
       }
     } else {
       res
