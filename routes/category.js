@@ -1,5 +1,5 @@
 const Categories = require('../models/Categories');
-const verifyTokenAndAdmin = require('../middleware/verifyToken');
+const { verifyTokenAndAdmin }= require('../middleware/verifyToken');
 
 const router = require('express').Router();
 

@@ -1,11 +1,15 @@
 const Login = require('../models/Login');
 const Style_List = require('../models/Style_List');
-const verifyTokenAndAdmin = require('../middleware/verifyToken');
+const { verifyToken, verifyTokenAndAdmin } = require('../middleware/verifyToken');
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const PRIVATE_KEY = fs.readFileSync('./private-key.txt');
-
+const Mailjet = require('node-mailjet');
+const mailjet = new Mailjet({
+  apiKey: process.env.MJ_APIKEY_PUBLIC || '',
+  apiSecret: process.env.MJ_APIKEY_PRIVATE || '',
+});
 router.post('/login', async (req, res) => {
   try {
     const user = await Login.findOne({ username: req.body.username });
@@ -20,7 +24,7 @@ router.post('/login', async (req, res) => {
           });
       } else {
         const accessToken = jwt.sign(
-          { id: user._id, role: user.role },
+          { id: user._id, role: user.Role },
           PRIVATE_KEY,
           { expiresIn: '2h' }
         );
@@ -123,6 +127,81 @@ router.post('/change-password-by-admin', verifyTokenAndAdmin, async (req, res) =
     res.status(500).json(err);
   }
 });
+// forgot password send email
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const user = await Login.findOne({ Email: req.body.email });
+    if (user) {
+      // statement
+      const accessToken = jwt.sign(
+        { id: user._id, role: user.role },
+        PRIVATE_KEY,
+        { expiresIn: '2h' }
+      );
+      const request = mailjet.post('send', { version: 'v3.1' }).request({
+        Messages: [
+          {
+            From: {
+              Email: 'no-reply@30slice.com',
+              Name: '30slice',
+            },
+            To: [
+              {
+                Email: req.body.email,
+                Name: user.Full_Name,
+              },
+            ],
+            Subject: '30slice - Khôi phục mật khẩu',
+            TextPart: 'Khôi phục mật khẩu',
+            HTMLPart: `<h3>Chào ${user.Full_Name},</h3>
+            <p>Bạn vừa yêu cầu khôi phục mật khẩu tại 30slice. Vui lòng click vào link bên dưới để tiếp tục.</p>
+            <a href="https://30slice.com/reset-password/${accessToken}">Khôi phục mật khẩu</a>
+            <p>Nếu bạn không yêu cầu khôi phục mật khẩu, vui lòng bỏ qua email này.</p>
+            <p>Trân trọng,</p>
+            <p>30slice</p>`,
+            CustomID: 'AppGettingStartedTest',
+          },
+        ],
+      });
+      request
+        .then((result) => {
+          console.log(result.body);
+        })
+        .catch((err) => {
+          console.log(err.statusCode);
+        });
+      res.status(200).json({ message: 'Gửi email thành công' });
+    } else {
+      res
+        .status(401)
+        .json({ message: 'Email không tồn tại.', status_code: 401 });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+// reset password
+router.post('/reset-password', verifyToken, async (req, res) => {
+  console.log(res.user);
+  try {
+    const user = await Login.findOne({ _id: req.body.id });
+    if (user) {
+      // statement
+      user.Password = req.body.new_password;
+      await user.save();
+      res.status(200).json({ message: 'Đổi mật khẩu thành công' });
+    } else {
+      res
+        .status(401)
+        .json({ message: 'Thông tin đăng nhập không đúng.', status_code: 401 });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
+
 
 
 

@@ -2,7 +2,8 @@ const Login = require('../models/Login');
 const StyleList = require('../models/Style_List');
 const Booking = require('../models/Booking');
 const router = require('express').Router();
-const verifyTokenAndAdmin = require('../middleware/verifyToken');
+const { verifyTokenAndAdmin } = require('../middleware/verifyToken');
+
 
 // join stylelist data with login data using lookup
 router.get('/gettAllStyleList', async (req, res) => {
