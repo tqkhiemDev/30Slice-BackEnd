@@ -1,9 +1,10 @@
 const Product = require('../models/Product');
+const verifyTokenAndAdmin = require('../middleware/verifyToken');
 
 const router = require('express').Router();
 
 //them
-router.post('/', async (req, res) => {
+router.post('/',verifyTokenAndAdmin, async (req, res) => {
   const newProduct = new Product(req.body);
   try {
     const savedProduct = await newProduct.save();
@@ -14,7 +15,7 @@ router.post('/', async (req, res) => {
 });
 
 //sua
-router.put('/', async (req, res) => {
+router.put('/',verifyTokenAndAdmin, async (req, res) => {
   try {
     const updatedProduct = await Product.findByIdAndUpdate(
       req.body._id,
@@ -28,7 +29,7 @@ router.put('/', async (req, res) => {
 });
 
 //toggle isShow
-router.put('/changeHideOrShow', async (req, res) => {
+router.put('/changeHideOrShow',verifyTokenAndAdmin, async (req, res) => {
   try {
     const updatedProduct = await Product.findOneAndUpdate(
       { _id: req.body._id },

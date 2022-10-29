@@ -1,7 +1,7 @@
 const Login = require('../models/Login');
 const Style_List = require('../models/Style_List');
 const Customer = require('../models/Customer');
-
+const verifyTokenAndAdmin = require('../middleware/verifyToken');
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
@@ -50,7 +50,7 @@ router.post('/login', async (req, res) => {
 });
 
 // register by admin
-router.post('/register', async (req, res) => {
+router.post('/register', verifyTokenAndAdmin, async (req, res) => {
   try {
     const newUser = new Login({
       Username: req.body.username,
@@ -77,7 +77,14 @@ router.post('/register', async (req, res) => {
 
     res.status(200).json(user);
   } catch (err) {
-    res.status(500).json(err);
+    if (err.code == 11000) {
+      res
+        .status(400)
+        .json({ message: `${Object.keys(err.keyValue)[0]} ${Object.values(err.keyValue)[0]} đã tồn tại`, status_code: 400 });
+    } else {
+      res.status(500).json(err);
+    }
+
   }
 });
 // customer register

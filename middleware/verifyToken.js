@@ -20,4 +20,16 @@ function verifyToken(req, res, next) {
   }
 }
 
+
+
+const verifyTokenAndAdmin = (req, res, next) => {
+    verifyToken(req, res, () => {
+      if (req.userInfo.Role == 'admin') {
+        next();
+      } else {
+        res.status(403).json({ message: 'Bạn không có quyền truy cập.', status_code: 403 });
+      }
+    });
+  };
+
 module.exports = verifyToken;
