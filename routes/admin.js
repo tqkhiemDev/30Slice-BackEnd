@@ -83,7 +83,6 @@ router.post('/register', verifyTokenAndAdmin, async (req, res) => {
 // change password admin
 router.post('/change-password', verifyTokenAndAdmin, async (req, res) => {
   try {
-    console.log(req.user);
     const user = await Login.findOne({ _id: req.user.id });
     if (user) {
       // statement
@@ -182,9 +181,8 @@ router.post('/forgot-password', async (req, res) => {
 });
 // reset password
 router.post('/reset-password', verifyToken, async (req, res) => {
-  console.log(res.user);
   try {
-    const user = await Login.findOne({ _id: req.body.id });
+    const user = await Login.findOne({ _id: req.user.id });
     if (user) {
       // statement
       user.Password = req.body.new_password;
