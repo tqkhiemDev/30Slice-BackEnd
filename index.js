@@ -7,19 +7,10 @@ const app = exp();
 const Mailjet = require('node-mailjet');
 dotenv.config();
 
-<<<<<<< HEAD
-const loginRoute = require("./routes/login");
-const categoryRoute = require("./routes/category");
-const serviceRoute = require("./routes/service");
-const styleListRoute = require("./routes/stylelist");
-const productRoute = require("./routes/product");
-const newsRoute = require("./routes/news");
+
 const orderRoute = require("./routes/order");
-=======
 const userRoute = require('./routes/user');
 const adminRoute = require('./routes/admin');
->>>>>>> 5b4d221c36c1f8b473d6126507d5f97b7610f10a
-
 const categoryRoute = require('./routes/category');
 const serviceRoute = require('./routes/service');
 const styleListRoute = require('./routes/stylelist');
@@ -40,15 +31,10 @@ mongoose
 app.use(cors());
 app.use(exp.json());
 
-<<<<<<< HEAD
-app.use("/api/users", loginRoute);
-app.use("/api/category", categoryRoute);
-app.use("/api/services", serviceRoute);
-app.use("/api/stylelist", styleListRoute);
-app.use("/api/product", productRoute);
-app.use("/api/news", newsRoute);
+
+
+
 app.use("/api/order", orderRoute);
-=======
 app.use('/api/user', userRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/category', categoryRoute);
@@ -57,7 +43,7 @@ app.use('/api/stylelist', styleListRoute);
 app.use('/api/product', productRoute);
 app.use('/api/news', newsRoute);
 app.use('/api/booking', bookingRoute);
->>>>>>> 5b4d221c36c1f8b473d6126507d5f97b7610f10a
+
 
 app.get('/', (req, res) => {
   res.send('ahihi 1234');
