@@ -36,8 +36,8 @@ router.post('/register', async (req, res) => {
     res.status(500).json(err);
   }
 });
-// login by customer
-router.post('/login', async (req, res) => {
+// booking by customer
+router.post('/booking', async (req, res) => {
   try {
     const user = await Login.findOne({ Phone: req.body.phone });
     if (user) {
