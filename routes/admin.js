@@ -83,8 +83,8 @@ router.post('/register', verifyTokenAndAdmin, async (req, res) => {
 // change password admin
 router.post('/change-password', verifyTokenAndAdmin, async (req, res) => {
   try {
-    console.log(res.user);
-    const user = await Login.findOne({ _id: res.user.id });
+    console.log(req.user);
+    const user = await Login.findOne({ _id: req.user.id });
     if (user) {
       // statement
       if (user.Password !== req.body.old_password) {
