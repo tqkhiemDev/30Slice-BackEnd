@@ -135,7 +135,7 @@ router.post('/forgot-password', async (req, res) => {
       const accessToken = jwt.sign(
         { id: user._id, role: user.role },
         PRIVATE_KEY,
-        { expiresIn: '2h' }
+        { expiresIn: '5m' }
       );
       const request = mailjet.post('send', { version: 'v3.1' }).request({
         Messages: [
