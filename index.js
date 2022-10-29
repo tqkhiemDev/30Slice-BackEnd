@@ -7,7 +7,9 @@ const app = exp();
 const Mailjet = require('node-mailjet');
 dotenv.config();
 
-const loginRoute = require('./routes/login');
+const userRoute = require('./routes/user');
+const adminRoute = require('./routes/admin');
+
 const categoryRoute = require('./routes/category');
 const serviceRoute = require('./routes/service');
 const styleListRoute = require('./routes/stylelist');
@@ -28,7 +30,8 @@ mongoose
 app.use(cors());
 app.use(exp.json());
 
-app.use('/api/user', loginRoute);
+app.use('/api/user', userRoute);
+app.use('/api/admin', adminRoute);
 app.use('/api/category', categoryRoute);
 app.use('/api/service', serviceRoute);
 app.use('/api/stylelist', styleListRoute);
