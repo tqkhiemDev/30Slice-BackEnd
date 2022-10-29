@@ -24,7 +24,7 @@ router.get('/getOneCategory/:id', async (req, res) => {
 });
 
 //them
-router.post('/', async (req, res) => {
+router.post('/',verifyTokenAndAdmin, async (req, res) => {
   const newCategories = new Categories(req.body);
   try {
     const savedCategories = await newCategories.save();
@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
 });
 
 //sua
-router.put('/', async (req, res) => {
+router.put('/',verifyTokenAndAdmin, async (req, res) => {
   try {
     const updatedCategory = await Categories.findByIdAndUpdate(
       req.body._id,
@@ -49,7 +49,7 @@ router.put('/', async (req, res) => {
 });
 
 //toggle isShow
-router.put('/changeHideOrShow', async (req, res) => {
+router.put('/changeHideOrShow',verifyTokenAndAdmin, async (req, res) => {
   try {
     const updatedCategory = await Categories.findOneAndUpdate(
       { _id: req.body._id },

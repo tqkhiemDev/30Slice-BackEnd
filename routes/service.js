@@ -1,5 +1,5 @@
 const Service = require('../models/Service');
-
+const verifyTokenAndAdmin = require('../middleware/verifyToken');
 const router = require('express').Router();
 
 //get all service
@@ -12,7 +12,7 @@ router.get('/getAllServices', async (req, res) => {
   }
 });
 // add new service
-router.post('/addService', async (req, res) => {
+router.post('/addService',verifyTokenAndAdmin, async (req, res) => {
   const newService = new Service(req.body);
   try {
     const savedService = await newService.save();
@@ -22,7 +22,7 @@ router.post('/addService', async (req, res) => {
   }
 });
 // delete service
-router.delete('/deleteService/', async (req, res) => {
+router.delete('/deleteService/',verifyTokenAndAdmin, async (req, res) => {
   try {
     const deletedService = await Service.findByIdAndDelete(req.body._id);
     res
@@ -33,7 +33,7 @@ router.delete('/deleteService/', async (req, res) => {
   }
 });
 // update service
-router.put('/updateService/', async (req, res) => {
+router.put('/updateService/',verifyTokenAndAdmin, async (req, res) => {
   try {
     const updatedService = await Service.findByIdAndUpdate(
       req.req.body._id,

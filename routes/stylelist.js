@@ -39,26 +39,9 @@ router.get('/gettAllStyleList', async (req, res) => {
     res.status(400).json(err);
   }
 });
-// add new shift to 1 stylelist
-router.post('/addShift', async (req, res) => {
-  try {
-    const data = await StyleList.findByIdAndUpdate(
-      req.body._id,
-      {
-        $push: {
-          Shift: req.body.shift,
-        },
-      },
-      { new: true }
-    );
-    res.status(200).json(data);
-  } catch (err) {
-    res.status(400).json(err);
-  }
-});
 
 // add new shift to shift array in stylelist not duplicate shift
-router.post('/addShiftToStyleList', async (req, res) => {
+router.post('/addShiftToStyleList',verifyTokenAndAdmin, async (req, res) => {
   try {
     const data = await StyleList.findByIdAndUpdate(
       req.body._id,
