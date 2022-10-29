@@ -137,7 +137,7 @@ router.post('/forgot-password', async (req, res) => {
         PRIVATE_KEY,
         { expiresIn: '5m' }
       );
-      const request = mailjet.post('send', { version: 'v3.1' }).request({
+      const request = await mailjet.post('send', { version: 'v3.1' }).request({
         Messages: [
           {
             From: {
@@ -162,14 +162,10 @@ router.post('/forgot-password', async (req, res) => {
           },
         ],
       });
-      request
-        .then((result) => {
-          console.log(result.body);
-        })
-        .catch((err) => {
-          console.log(err.statusCode);
-        });
-      res.status(200).json({ message: 'Gửi email thành công' });
+      console.log(request.body);
+      if (request.body.Messages[0].Status === 'success') {
+        res.status(200).json({ message: 'Gửi email thành công' });
+      }
     } else {
       res
         .status(401)
