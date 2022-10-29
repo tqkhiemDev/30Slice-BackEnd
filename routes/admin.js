@@ -76,5 +76,54 @@ router.post('/register', verifyTokenAndAdmin, async (req, res) => {
 
   }
 });
+// change password admin
+router.post('/change-password', verifyTokenAndAdmin, async (req, res) => {
+  try {
+    console.log(res.user);
+    const user = await Login.findOne({ _id: res.user.id });
+    if (user) {
+      // statement
+      if (user.Password !== req.body.old_password) {
+        res
+          .status(401)
+          .json({
+            message: 'Mật khẩu cũ không đúng.',
+            status_code: 401,
+          });
+      } else {
+        user.Password = req.body.new_password;
+        await user.save();
+        res.status(200).json({ message: 'Đổi mật khẩu thành công' });
+      }
+    } else {
+      res
+        .status(401)
+        .json({ message: 'Thông tin đăng nhập không đúng.', status_code: 401 });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// change password by admin
+router.post('/change-password-by-admin', verifyTokenAndAdmin, async (req, res) => {
+  try {
+    const user = await Login.findOne({ _id: req.body.id });
+    if (user) {
+      // statement
+      user.Password = req.body.new_password;
+      await user.save();
+      res.status(200).json({ message: 'Đổi mật khẩu thành công' });
+    } else {
+      res
+        .status(401)
+        .json({ message: 'Thông tin đăng nhập không đúng.', status_code: 401 });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
 
 module.exports = router;
