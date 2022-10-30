@@ -26,7 +26,7 @@ router.post('/login', async (req, res) => {
         const accessToken = jwt.sign(
           { id: user._id, role: user.Role },
           PRIVATE_KEY,
-          { expiresIn: '2h' }
+          { expiresIn: '30m' }
         );
         res
           .status(200)
@@ -46,13 +46,26 @@ router.get('/info', verifyTokenAndAdmin, async (req, res) => {
   try {
     const user = await Login.findById(req.user.id);
     // eliminate password from response
-    const { Password, ...info } = user._doc;
-    res.status(200).json(info);
+    const accessToken = jwt.sign(
+      { id: user._id, role: user.Role },
+      PRIVATE_KEY,
+      { expiresIn: '12h' }
+    );
+    // push AccessToken to user
+    let data = {
+      accessToken: accessToken,
+      Username: user.Username,
+      Role: user.Role,
+      Full_Name: user.Full_Name,
+      Email: user.Email,
+      Phone: user.Phone,
+    };
+    res.status(200).json(data);
 
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
 
 
 // register by admin
@@ -170,7 +183,7 @@ router.post('/forgot-password', async (req, res) => {
             TemplateID: 4318212,
             TemplateLanguage: true,
             Subject: '30slice - Khôi phục mật khẩu',
-            
+
           },
         ],
       });
