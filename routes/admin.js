@@ -41,6 +41,19 @@ router.post('/login', async (req, res) => {
     res.status(500).json(err);
   }
 });
+// get info admin
+router.get('/info', verifyTokenAndAdmin, async (req, res) => {
+  try {
+    const user = await Login.findById(req.user.id);
+    // eliminate password from response
+    const { Password, ...info } = user._doc;
+    res.status(200).json(info);
+
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 
 // register by admin
 router.post('/register', verifyTokenAndAdmin, async (req, res) => {
