@@ -178,7 +178,7 @@ router.post('/forgot-password', async (req, res) => {
             ],
             Variables: {
               name: `${user.Full_Name}`,
-              link: `https://admin.30slice.com/reset-password/${accessToken}`,
+              link: `http://localhost:3000/reset-password/${accessToken}`,
             },
             TemplateID: 4318212,
             TemplateLanguage: true,
