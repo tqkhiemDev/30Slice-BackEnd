@@ -1,6 +1,10 @@
-const Order = require("../models/Order");
-var dateFormat = require('dateformat');
 const router = require("express").Router();
+const Order = require("../models/Order");
+
+const querystring = require('qs');
+const crypto = require("crypto"); 
+const dateFormat = require('dateformat');
+
 function sortObject(obj) {
 	var sorted = {};
 	var str = [];
@@ -93,6 +97,7 @@ router.post('/create_payment_url', function (req, res, next) {
       req.connection.remoteAddress ||
       req.socket.remoteAddress ||
       req.connection.socket.remoteAddress;
+      console.log(ipAddr)
 
   var tmnCode = process.env.vnp_TmnCode;
   var secretKey = process.env.vnp_HashSecret;
@@ -102,9 +107,7 @@ router.post('/create_payment_url', function (req, res, next) {
 
 
   var createDate = dateFormat(date, 'yyyymmddHHmmss');;
-  var orderId = req.body.orderId;;
-  var amount = req.body.amount;
-  var bankCode = '';
+  var orderId = req.body.orderId;
   
   var vnp_Params = {};
   vnp_Params['vnp_Version'] = '2.1.0';
@@ -113,27 +116,25 @@ router.post('/create_payment_url', function (req, res, next) {
   vnp_Params['vnp_Locale'] = 'vn';
   vnp_Params['vnp_CurrCode'] = 'VND';
   vnp_Params['vnp_TxnRef'] = orderId;
-  vnp_Params['vnp_OrderInfo'] = "Thanh toán đơn hàng 30Slice";
+  vnp_Params['vnp_OrderInfo'] = "Thanh toán đơn hàng 30Slice " + orderId;
   vnp_Params['vnp_OrderType'] = "billpayment";
-  vnp_Params['vnp_Amount'] = amount * 100;
+  vnp_Params['vnp_Amount'] = req.body.amount * 100;
   vnp_Params['vnp_ReturnUrl'] = returnUrl;
   vnp_Params['vnp_IpAddr'] = ipAddr;
   vnp_Params['vnp_CreateDate'] = createDate;
-  if(bankCode !== null && bankCode !== ''){
-      vnp_Params['vnp_BankCode'] = bankCode;
-  }
+
 
   vnp_Params = sortObject(vnp_Params);
 
-  var querystring = require('qs');
+     
+
   var signData = querystring.stringify(vnp_Params, { encode: false });
-  var crypto = require("crypto");     
   var hmac = crypto.createHmac("sha512", secretKey);
   var signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex"); 
   vnp_Params['vnp_SecureHash'] = signed;
   vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
-  console.log(vnpUrl)
-  res.json(vnpUrl)
+
+  res.status(200).json(vnpUrl)
 });
 
 module.exports = router;
