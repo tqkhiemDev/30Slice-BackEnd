@@ -1,6 +1,6 @@
 const Login = require('../models/Login');
 const Style_List = require('../models/Style_List');
-const { verifyToken, verifyTokenAndAdmin } = require('../middleware/verifyToken');
+const { verifyToken, verifyTokenAndAdmin } = require('../middlewares/verifyToken');
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const fs = require('fs');

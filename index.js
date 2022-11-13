@@ -1,40 +1,25 @@
 const exp = require('express');
-const port = 3200;
+const app = exp();
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const app = exp();
 const Mailjet = require('node-mailjet');
+
 dotenv.config();
-
-
-const orderRoute = require("./routes/order");
-const userRoute = require('./routes/user');
-const adminRoute = require('./routes/admin');
-const categoryRoute = require('./routes/category');
-const serviceRoute = require('./routes/service');
-const styleListRoute = require('./routes/stylelist');
-const productRoute = require('./routes/product');
-const newsRoute = require('./routes/news');
-const bookingRoute = require('./routes/booking');
-
-const mailjet = new Mailjet({
-  apiKey: process.env.MJ_APIKEY_PUBLIC || '',
-  apiSecret: process.env.MJ_APIKEY_PRIVATE || '',
-});
-mongoose
-  .connect(process.env.MONGO_URL)
-  .then(() => console.log('DB Connection Successfull!'))
-  .catch((err) => {
-    console.log(err);
-  });
 app.use(cors());
 app.use(exp.json());
 
+const orderRoute = require('./app/routes/order');
+const userRoute = require('./app/routes/user');
+const adminRoute = require('./app/routes/admin');
+const categoryRoute = require('./app/routes/category');
+const serviceRoute = require('./app/routes/service');
+const styleListRoute = require('./app/routes/stylelist');
+const productRoute = require('./app/routes/product');
+const newsRoute = require('./app/routes/news');
+const bookingRoute = require('./app/routes/booking');
 
-
-
-app.use("/api/order", orderRoute);
+app.use('/api/order', orderRoute);
 app.use('/api/user', userRoute);
 app.use('/api/admin', adminRoute);
 app.use('/api/category', categoryRoute);
@@ -44,9 +29,22 @@ app.use('/api/product', productRoute);
 app.use('/api/news', newsRoute);
 app.use('/api/booking', bookingRoute);
 
+// Refresh token
+const authRoute = require('./app/routes/auth/auth.routes');
+const userTestRoute = require('./app/routes/auth/user.routes');
+app.use('/api/auth', authRoute);
+app.use('/api/user/test', userTestRoute);
 
-app.get('/', (req, res) => {
-  res.send('ahihi 1234');
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => console.log('DB Connection Successfull!'))
+  .catch((err) => {
+    console.log(err);
+  });
+
+const mailjet = new Mailjet({
+  apiKey: process.env.MJ_APIKEY_PUBLIC || '',
+  apiSecret: process.env.MJ_APIKEY_PRIVATE || '',
 });
 
 app.post('/send-email', async (req, res) => {
@@ -89,6 +87,6 @@ app.post('/send-email', async (req, res) => {
   //     })
 });
 
-app.listen(port, () => {
-  console.log(`Ung dung dang chay voi port ${port}`);
+app.listen(process.env.PORT, () => {
+  console.log(`Ung dung dang chay voi port ${process.env.PORT}`);
 });

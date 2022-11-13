@@ -1,5 +1,5 @@
 const Service = require('../models/Service');
-const { verifyTokenAndAdmin } = require('../middleware/verifyToken');
+const { verifyTokenAndAdmin } = require('../middlewares/verifyToken');
 const router = require('express').Router();
 
 //get all service
