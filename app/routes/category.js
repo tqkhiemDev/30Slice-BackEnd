@@ -12,6 +12,16 @@ router.get('/getAllCategories', async (req, res) => {
     res.status(400).json(err);
   }
 });
+// get all categories where Is_Show is true
+router.get('/getCategories', async (req, res) => {
+  try {
+    const categories = await Categories.find({Is_Show: true});
+    res.status(200).json(categories);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
 
 //show 1
 router.get('/getOneCategory/:id', async (req, res) => {
