@@ -7,6 +7,8 @@ const NewsSchema = new mongoose.Schema(
     image: { type: String, require: true },
     Title: { type: String, require: true },
     Desc : {type : String, require : true},
+    Ordinal: { type: Number, required: true, unique: true },
+    Is_Hot : {type : Boolean , require : true, default : false},
     Content: { type: String, required: true },
     Create_By: { type: String, required: true },
     Is_Delete: { type: Boolean, default: false },
