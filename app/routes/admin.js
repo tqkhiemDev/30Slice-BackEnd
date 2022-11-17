@@ -4,7 +4,7 @@ const {
   verifyToken,
   verifyTokenAndAdmin,
 } = require('../middlewares/verifyToken');
-const { authJwt } = require('../../middlewares/auth');
+const { authJwt } = require('../middlewares/auth');
 
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
