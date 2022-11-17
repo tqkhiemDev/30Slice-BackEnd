@@ -65,11 +65,15 @@ router.get("/getProductsByCategory/:id", async (req, res) => {
   }
 });
 
-//show one product
+// get one product and get views +1
 router.get("/getOneProduct/:id", async (req, res) => {
   const Id_Product = req.params.id;
   try {
     const products = await Product.findById(Id_Product);
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: Id_Product },
+      { Views: products.Views + 1 }
+    );
     res.status(200).json(products);
   } catch (err) {
     res.status(400).json(err);
