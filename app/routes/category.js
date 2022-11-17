@@ -63,7 +63,7 @@ router.put('/changeHideOrShow',verifyTokenAndAdmin, async (req, res) => {
 // get all categories where parent is !null
 router.get('/getCategoriesParent', async (req, res) => {
   try {
-    const categories = await Categories.find({ Parent_Id: { $ne: null } });
+    const categories = await Categories.find({ Parent_Id: null });
     res.status(200).json(categories);
   } catch (err) {
     res.status(400).json(err);
