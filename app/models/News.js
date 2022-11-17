@@ -6,6 +6,7 @@ const NewsSchema = new mongoose.Schema(
     Id_Categories: { type: mongoose.Schema.Types.ObjectId, ref: 'categories' },
     image: { type: String, require: true },
     Title: { type: String, require: true },
+    Desc : {type : String, require : true},
     Content: { type: String, required: true },
     Create_By: { type: String, required: true },
     Is_Delete: { type: Boolean, default: false },
