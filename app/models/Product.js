@@ -13,6 +13,7 @@ const ProductSchema = new mongoose.Schema(
     Views: { type: Number, default: 0 },
     Rating: { type: Number, default: 0 },
     Details: { type: String },
+    Discount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
