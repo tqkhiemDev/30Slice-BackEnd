@@ -11,7 +11,7 @@ const NewsSchema = new mongoose.Schema(
     Is_Hot : {type : Boolean , require : true, default : false},
     Content: { type: String, required: true },
     Create_By: { type: String, required: true },
-    Is_Show: { type: Boolean, default: false },
+    Is_Show: { type: Boolean, default: true },
     Views: { type: Number, default: 0 },
   },
   { timestamps: true }

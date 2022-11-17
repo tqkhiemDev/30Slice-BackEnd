@@ -70,4 +70,15 @@ router.put('/delete', async (req, res) => {
     res.status(400).json(err);
   }
 });
+
+router.delete('/',async (req,res) => {
+  try {
+    await News.findByIdAndDelete(
+      { _id: req.body._id }
+    );
+    res.status(200).json('delete success!!');
+  } catch (err) {
+    res.status(400).json(err);
+  }
+})
 module.exports = router;
