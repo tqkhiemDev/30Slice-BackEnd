@@ -1,6 +1,11 @@
 const Login = require('../models/Login');
 const Style_List = require('../models/Style_List');
-const { verifyToken, verifyTokenAndAdmin } = require('../middlewares/verifyToken');
+const {
+  verifyToken,
+  verifyTokenAndAdmin,
+} = require('../middlewares/verifyToken');
+const { authJwt } = require('../../middlewares/auth');
+
 const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
@@ -16,12 +21,10 @@ router.post('/login', async (req, res) => {
     if (user) {
       // statement
       if (user.Password !== req.body.password) {
-        res
-          .status(401)
-          .json({
-            message: 'Thông tin đăng nhập không đúng.',
-            status_code: 401,
-          });
+        res.status(401).json({
+          message: 'Thông tin đăng nhập không đúng.',
+          status_code: 401,
+        });
       } else {
         const accessToken = jwt.sign(
           { id: user._id, role: user.Role },
@@ -42,116 +45,132 @@ router.post('/login', async (req, res) => {
   }
 });
 // get info admin
-router.get('/info', verifyTokenAndAdmin, async (req, res) => {
-  try {
-    const user = await Login.findById(req.user.id);
-    // eliminate password from response
-    const accessToken = jwt.sign(
-      { id: user._id, role: user.Role },
-      PRIVATE_KEY,
-      { expiresIn: '12h' }
-    );
-    // push AccessToken to user
-    let data = {
-      accessToken: accessToken,
-      Username: user.Username,
-      Role: user.Role,
-      Full_Name: user.Full_Name,
-      Email: user.Email,
-      Phone: user.Phone,
-    };
-    res.status(200).json(data);
-
+router.get(
+  '/info',
+  [authJwt.verifyToken, authJwt.isAdmin],
+  async (req, res) => {
+    try {
+      const user = await Login.findById(req.user.id);
+      // eliminate password from response
+      const accessToken = jwt.sign(
+        { id: user._id, role: user.Role },
+        PRIVATE_KEY,
+        { expiresIn: '12h' }
+      );
+      // push AccessToken to user
+      let data = {
+        accessToken: accessToken,
+        Username: user.Username,
+        Role: user.Role,
+        Full_Name: user.Full_Name,
+        Email: user.Email,
+        Phone: user.Phone,
+      };
+      res.status(200).json(data);
     } catch (err) {
       res.status(500).json(err);
     }
-  });
-
+  }
+);
 
 // register by admin
-router.post('/register', verifyTokenAndAdmin, async (req, res) => {
-  try {
-    const newUser = new Login({
-      Username: req.body.username,
-      Password: req.body.password,
-      Full_Name: req.body.full_name,
-      Email: req.body.email,
-      Phone: req.body.phone,
-      Role: req.body.role,
-    });
-    const user = await newUser.save();
-    switch (req.body.role) {
-      case 'styleList':
-        const newStyle_List = new Style_List({
-          Id_User: user._id,
-          Shifts: [],
+router.post(
+  '/register',
+  [authJwt.verifyToken, authJwt.isAdmin],
+  async (req, res) => {
+    try {
+      const newUser = new Login({
+        Username: req.body.username,
+        Password: req.body.password,
+        Full_Name: req.body.full_name,
+        Email: req.body.email,
+        Phone: req.body.phone,
+        Role: req.body.role,
+      });
+      const user = await newUser.save();
+      switch (req.body.role) {
+        case 'styleList':
+          const newStyle_List = new Style_List({
+            Id_User: user._id,
+            Shifts: [],
+          });
+          const style_list = await newStyle_List.save();
+
+          break;
+        case 'writer':
+          break;
+        default:
+      }
+
+      res.status(200).json(user);
+    } catch (err) {
+      if (err.code == 11000) {
+        res.status(400).json({
+          message: `${Object.keys(err.keyValue)[0]} ${
+            Object.values(err.keyValue)[0]
+          } đã tồn tại`,
+          status_code: 400,
         });
-        const style_list = await newStyle_List.save();
-
-        break;
-      case 'writer':
-        break;
-      default:
+      } else {
+        res.status(500).json(err);
+      }
     }
-
-    res.status(200).json(user);
-  } catch (err) {
-    if (err.code == 11000) {
-      res
-        .status(400)
-        .json({ message: `${Object.keys(err.keyValue)[0]} ${Object.values(err.keyValue)[0]} đã tồn tại`, status_code: 400 });
-    } else {
-      res.status(500).json(err);
-    }
-
   }
-});
+);
 // change password admin
-router.post('/change-password', verifyTokenAndAdmin, async (req, res) => {
-  try {
-    const user = await Login.findOne({ _id: req.user.id });
-    if (user) {
-      // statement
-      if (user.Password !== req.body.old_password) {
-        res
-          .status(401)
-          .json({
+router.post(
+  '/change-password',
+  [authJwt.verifyToken, authJwt.isAdmin],
+  async (req, res) => {
+    try {
+      const user = await Login.findOne({ _id: req.user.id });
+      if (user) {
+        // statement
+        if (user.Password !== req.body.old_password) {
+          res.status(401).json({
             message: 'Mật khẩu cũ không đúng.',
             status_code: 401,
           });
+        } else {
+          user.Password = req.body.new_password;
+          await user.save();
+          res.status(200).json({ message: 'Đổi mật khẩu thành công' });
+        }
       } else {
+        res.status(401).json({
+          message: 'Thông tin đăng nhập không đúng.',
+          status_code: 401,
+        });
+      }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  }
+);
+
+// change password by admin
+router.post(
+  '/change-password-by-admin',
+  [authJwt.verifyToken, authJwt.isAdmin],
+  async (req, res) => {
+    try {
+      const user = await Login.findOne({ _id: req.body.id });
+      if (user) {
+        // statement
         user.Password = req.body.new_password;
         await user.save();
         res.status(200).json({ message: 'Đổi mật khẩu thành công' });
+      } else {
+        res.status(401).json({
+          message: 'Thông tin đăng nhập không đúng.',
+          status_code: 401,
+        });
       }
-    } else {
-      res
-        .status(401)
-        .json({ message: 'Thông tin đăng nhập không đúng.', status_code: 401 });
+    } catch (err) {
+      res.status(500).json(err);
     }
-  } catch (err) {
-    res.status(500).json(err);
   }
-});
-
-// change password by admin
-router.post('/change-password-by-admin', verifyTokenAndAdmin, async (req, res) => {
-  try {
-    const user = await Login.findOne({ _id: req.body.id });
-    if (user) {
-      // statement
-      user.Password = req.body.new_password;
-      await user.save();
-      res.status(200).json({ message: 'Đổi mật khẩu thành công' });
-    } else {
-      res
-        .status(401)
-        .json({ message: 'Thông tin đăng nhập không đúng.', status_code: 401 });
-    }
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+);
 // forgot password send email
 router.post('/forgot-password', async (req, res) => {
   try {
@@ -183,7 +202,6 @@ router.post('/forgot-password', async (req, res) => {
             TemplateID: 4318212,
             TemplateLanguage: true,
             Subject: '30slice - Khôi phục mật khẩu',
-
           },
         ],
       });
@@ -204,7 +222,7 @@ router.post('/forgot-password', async (req, res) => {
   }
 });
 // reset password
-router.post('/reset-password', verifyToken, async (req, res) => {
+router.post('/reset-password', authJwt.verifyToken, async (req, res) => {
   try {
     const user = await Login.findOne({ _id: req.user.id });
     if (user) {
@@ -221,10 +239,5 @@ router.post('/reset-password', verifyToken, async (req, res) => {
     res.status(500).json(err);
   }
 });
-
-
-
-
-
 
 module.exports = router;
