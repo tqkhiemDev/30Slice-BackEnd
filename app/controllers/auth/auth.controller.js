@@ -68,6 +68,7 @@ exports.signin = (req, res) => {
       role: user.Role,
       accessToken: token,
       refreshToken: refreshToken,
+      phone : user.Phone
     });
   });
 };
