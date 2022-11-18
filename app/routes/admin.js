@@ -10,68 +10,13 @@ const router = require('express').Router();
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const PRIVATE_KEY = fs.readFileSync('./private-key.txt');
+const bcrypt = require('bcrypt');
+
 const Mailjet = require('node-mailjet');
 const mailjet = new Mailjet({
   apiKey: process.env.MJ_APIKEY_PUBLIC || '',
   apiSecret: process.env.MJ_APIKEY_PRIVATE || '',
 });
-router.post('/login', async (req, res) => {
-  try {
-    const user = await Login.findOne({ username: req.body.username });
-    if (user) {
-      // statement
-      if (user.Password !== req.body.password) {
-        res.status(401).json({
-          message: 'Thông tin đăng nhập không đúng.',
-          status_code: 401,
-        });
-      } else {
-        const accessToken = jwt.sign(
-          { id: user._id, role: user.Role },
-          PRIVATE_KEY,
-          { expiresIn: '30m' }
-        );
-        res
-          .status(200)
-          .json({ accessToken, role: user.Role, username: user.Username });
-      }
-    } else {
-      res
-        .status(401)
-        .json({ message: 'Thông tin đăng nhập không đúng.', status_code: 401 });
-    }
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-// get info admin
-router.get(
-  '/info',
-  [authJwt.verifyToken, authJwt.isAdmin],
-  async (req, res) => {
-    try {
-      const user = await Login.findById(req.user.id);
-      // eliminate password from response
-      const accessToken = jwt.sign(
-        { id: user._id, role: user.Role },
-        PRIVATE_KEY,
-        { expiresIn: '12h' }
-      );
-      // push AccessToken to user
-      let data = {
-        accessToken: accessToken,
-        Username: user.Username,
-        Role: user.Role,
-        Full_Name: user.Full_Name,
-        Email: user.Email,
-        Phone: user.Phone,
-      };
-      res.status(200).json(data);
-    } catch (err) {
-      res.status(500).json(err);
-    }
-  }
-);
 
 // register by admin
 router.post(
@@ -123,16 +68,21 @@ router.post(
   [authJwt.verifyToken, authJwt.isAdmin],
   async (req, res) => {
     try {
-      const user = await Login.findOne({ _id: req.user.id });
+      const user = await Login.findOne({ _id: req.userId });
       if (user) {
         // statement
-        if (user.Password !== req.body.old_password) {
+        const passwordIsValid = bcrypt.compareSync(
+          req.body.old_password,
+          user.Password
+        );
+        console.log(passwordIsValid)
+        if (!passwordIsValid) {
           res.status(401).json({
             message: 'Mật khẩu cũ không đúng.',
             status_code: 401,
           });
         } else {
-          user.Password = req.body.new_password;
+          user.Password = bcrypt.hashSync(req.body.new_password, 8);
           await user.save();
           res.status(200).json({ message: 'Đổi mật khẩu thành công' });
         }
@@ -157,7 +107,7 @@ router.post(
       const user = await Login.findOne({ _id: req.body.id });
       if (user) {
         // statement
-        user.Password = req.body.new_password;
+        user.Password = bcrypt.hashSync(req.body.new_password, 8);
         await user.save();
         res.status(200).json({ message: 'Đổi mật khẩu thành công' });
       } else {
@@ -205,7 +155,6 @@ router.post('/forgot-password', async (req, res) => {
           },
         ],
       });
-      console.log(request.body);
       if (request.body.Messages[0].Status === 'success') {
         res.status(200).json({ message: 'Gửi email thành công' });
       } else {
@@ -217,17 +166,16 @@ router.post('/forgot-password', async (req, res) => {
         .json({ message: 'Email không tồn tại.', status_code: 401 });
     }
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 });
 // reset password
 router.post('/reset-password', authJwt.verifyToken, async (req, res) => {
   try {
-    const user = await Login.findOne({ _id: req.user.id });
+    const user = await Login.findOne({ _id: req.userId });
     if (user) {
       // statement
-      user.Password = req.body.new_password;
+      user.Password = bcrypt.hashSync(req.body.new_password, 8)
       await user.save();
       res.status(200).json({ message: 'Đổi mật khẩu thành công' });
     } else {
