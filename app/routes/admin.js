@@ -77,8 +77,9 @@ router.put(
         );
         console.log(passwordIsValid);
         if (!passwordIsValid) {
-          res.status(200).json({
-            message: "Mật khẩu cũ không đúng."
+          res.status(400).json({
+            message: "Mật khẩu cũ không đúng.",
+            status_code: 400,
           });
         } else {
           user.Password = bcrypt.hashSync(req.body.new_password, 8);
