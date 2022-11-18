@@ -1,5 +1,6 @@
 const Categories = require('../models/Categories');
 const { verifyTokenAndAdmin }= require('../middlewares/verifyToken');
+const { authJwt } = require('../middlewares/auth');
 
 const router = require('express').Router();
 
@@ -45,7 +46,7 @@ router.post('/',verifyTokenAndAdmin, async (req, res) => {
 });
 
 //sua
-router.put('/',verifyTokenAndAdmin, async (req, res) => {
+router.put('/', [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
   try {
     const updatedCategory = await Categories.findByIdAndUpdate(
       req.body._id,
