@@ -77,14 +77,13 @@ router.put(
         );
         console.log(passwordIsValid);
         if (!passwordIsValid) {
-          res.status(400).json({
+          res.status(200).json({
             message: "Mật khẩu cũ không đúng.",
-            status_code: 400,
           });
         } else {
           user.Password = bcrypt.hashSync(req.body.new_password, 8);
           await user.save();
-          res.status(200).json({ message: "Đổi mật khẩu thành công" });
+          res.status(201).json({ message: "Đổi mật khẩu thành công" });
         }
       }
     } catch (err) {
