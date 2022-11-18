@@ -63,7 +63,7 @@ router.post(
   }
 );
 // change password admin
-router.post(
+router.put(
   '/change-password',
   [authJwt.verifyToken, authJwt.isAdmin],
   async (req, res) => {
