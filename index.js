@@ -4,10 +4,14 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const Mailjet = require('node-mailjet');
+const { logger, logEvents } = require('./app/middlewares/auth/logger');
+const errorHandler = require('./app/middlewares/errorHandler');
 
 dotenv.config();
 app.use(cors());
 app.use(exp.json());
+app.use(logger);
+app.use(errorHandler);
 
 const orderRoute = require('./app/routes/order');
 const userRoute = require('./app/routes/user');
@@ -41,6 +45,14 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
+mongoose.connection.on('error', (err) => {
+  console.log(err);
+  logEvents(
+    `${err.no}: ${err.code}\t${err.syscall}\t${err.hostname}`,
+    'mongoErrLog.log'
+  );
+});
 
 const mailjet = new Mailjet({
   apiKey: process.env.MJ_APIKEY_PUBLIC || '',
