@@ -16,7 +16,7 @@ const catchError = (err, res) => {
 };
 
 const verifyToken = (req, res, next) => {
-  let token = req.headers?.Authorization.replace('Bearer ', '');
+  let token = req.headers?.authorization.replace('Bearer ', '');
   if (!token) {
     return res.status(403).send({ message: 'No token provided!' });
   }
