@@ -1,26 +1,26 @@
-const Login = require('../models/Login');
-const Style_List = require('../models/Style_List');
+const Login = require("../models/Login");
+const Style_List = require("../models/Style_List");
 const {
   verifyToken,
   verifyTokenAndAdmin,
-} = require('../middlewares/verifyToken');
-const { authJwt } = require('../middlewares/auth');
+} = require("../middlewares/verifyToken");
+const { authJwt } = require("../middlewares/auth");
 
-const router = require('express').Router();
-const jwt = require('jsonwebtoken');
-const fs = require('fs');
-const PRIVATE_KEY = fs.readFileSync('./private-key.txt');
-const bcrypt = require('bcrypt');
+const router = require("express").Router();
+const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const PRIVATE_KEY = fs.readFileSync("./private-key.txt");
+const bcrypt = require("bcrypt");
 
-const Mailjet = require('node-mailjet');
+const Mailjet = require("node-mailjet");
 const mailjet = new Mailjet({
-  apiKey: process.env.MJ_APIKEY_PUBLIC || '',
-  apiSecret: process.env.MJ_APIKEY_PRIVATE || '',
+  apiKey: process.env.MJ_APIKEY_PUBLIC || "",
+  apiSecret: process.env.MJ_APIKEY_PRIVATE || "",
 });
 
 // register by admin
 router.post(
-  '/register',
+  "/register",
   [authJwt.verifyToken, authJwt.isAdmin],
   async (req, res) => {
     try {
@@ -34,7 +34,7 @@ router.post(
       });
       const user = await newUser.save();
       switch (req.body.role) {
-        case 'styleList':
+        case "styleList":
           const newStyle_List = new Style_List({
             Id_User: user._id,
             Shifts: [],
@@ -42,7 +42,7 @@ router.post(
           const style_list = await newStyle_List.save();
 
           break;
-        case 'writer':
+        case "writer":
           break;
         default:
       }
@@ -64,7 +64,7 @@ router.post(
 );
 // change password admin
 router.put(
-  '/change-password',
+  "/change-password",
   [authJwt.verifyToken, authJwt.isAdmin],
   async (req, res) => {
     try {
@@ -75,22 +75,16 @@ router.put(
           req.body.old_password,
           user.Password
         );
-        console.log(passwordIsValid)
+        console.log(passwordIsValid);
         if (!passwordIsValid) {
-          res.status(401).json({
-            message: 'Mật khẩu cũ không đúng.',
-            status_code: 401,
+          res.status(200).json({
+            message: "Mật khẩu cũ không đúng."
           });
         } else {
           user.Password = bcrypt.hashSync(req.body.new_password, 8);
           await user.save();
-          res.status(200).json({ message: 'Đổi mật khẩu thành công' });
+          res.status(200).json({ message: "Đổi mật khẩu thành công" });
         }
-      } else {
-        res.status(401).json({
-          message: 'Thông tin đăng nhập không đúng.',
-          status_code: 401,
-        });
       }
     } catch (err) {
       res.status(500).json(err);
@@ -100,7 +94,7 @@ router.put(
 
 // change password by admin
 router.post(
-  '/change-password-by-admin',
+  "/change-password-by-admin",
   [authJwt.verifyToken, authJwt.isAdmin],
   async (req, res) => {
     try {
@@ -109,10 +103,10 @@ router.post(
         // statement
         user.Password = bcrypt.hashSync(req.body.new_password, 8);
         await user.save();
-        res.status(200).json({ message: 'Đổi mật khẩu thành công' });
+        res.status(200).json({ message: "Đổi mật khẩu thành công" });
       } else {
         res.status(401).json({
-          message: 'Thông tin đăng nhập không đúng.',
+          message: "Thông tin đăng nhập không đúng.",
           status_code: 401,
         });
       }
@@ -122,7 +116,7 @@ router.post(
   }
 );
 // forgot password send email
-router.post('/forgot-password', async (req, res) => {
+router.post("/forgot-password", async (req, res) => {
   try {
     const user = await Login.findOne({ Email: req.body.email });
     if (user) {
@@ -130,14 +124,14 @@ router.post('/forgot-password', async (req, res) => {
       const accessToken = jwt.sign(
         { id: user._id, role: user.role },
         PRIVATE_KEY,
-        { expiresIn: '5m' }
+        { expiresIn: "5m" }
       );
-      const request = await mailjet.post('send', { version: 'v3.1' }).request({
+      const request = await mailjet.post("send", { version: "v3.1" }).request({
         Messages: [
           {
             From: {
-              Email: 'no-reply@30slice.com',
-              Name: '30slice',
+              Email: "no-reply@30slice.com",
+              Name: "30slice",
             },
             To: [
               {
@@ -151,37 +145,37 @@ router.post('/forgot-password', async (req, res) => {
             },
             TemplateID: 4318212,
             TemplateLanguage: true,
-            Subject: '30slice - Khôi phục mật khẩu',
+            Subject: "30slice - Khôi phục mật khẩu",
           },
         ],
       });
-      if (request.body.Messages[0].Status === 'success') {
-        res.status(200).json({ message: 'Gửi email thành công' });
+      if (request.body.Messages[0].Status === "success") {
+        res.status(200).json({ message: "Gửi email thành công" });
       } else {
-        res.status(400).json({ message: 'Gửi email thất bại' });
+        res.status(400).json({ message: "Gửi email thất bại" });
       }
     } else {
       res
         .status(401)
-        .json({ message: 'Email không tồn tại.', status_code: 401 });
+        .json({ message: "Email không tồn tại.", status_code: 401 });
     }
   } catch (err) {
     res.status(500).json(err);
   }
 });
 // reset password
-router.post('/reset-password', authJwt.verifyToken, async (req, res) => {
+router.post("/reset-password", authJwt.verifyToken, async (req, res) => {
   try {
     const user = await Login.findOne({ _id: req.userId });
     if (user) {
       // statement
-      user.Password = bcrypt.hashSync(req.body.new_password, 8)
+      user.Password = bcrypt.hashSync(req.body.new_password, 8);
       await user.save();
-      res.status(200).json({ message: 'Đổi mật khẩu thành công' });
+      res.status(200).json({ message: "Đổi mật khẩu thành công" });
     } else {
       res
         .status(401)
-        .json({ message: 'Thông tin đăng nhập không đúng.', status_code: 401 });
+        .json({ message: "Thông tin đăng nhập không đúng.", status_code: 401 });
     }
   } catch (err) {
     res.status(500).json(err);
