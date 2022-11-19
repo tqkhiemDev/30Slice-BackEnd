@@ -38,6 +38,7 @@ router.post('/', async (req, res) => {
   const newNews = new News(req.body);
   try {
     const savedNews = await newNews.save();
+    console.log(savedNews);
     res.status(200).json(savedNews);
   } catch (err) {
     res.status(400).json(err);
@@ -74,7 +75,7 @@ router.put('/delete', async (req, res) => {
 router.delete('/',async (req,res) => {
   try {
     await News.findByIdAndDelete(
-      { _id: req.body._id }
+      { _id: req.params._id }
     );
     res.status(200).json('delete success!!');
   } catch (err) {
