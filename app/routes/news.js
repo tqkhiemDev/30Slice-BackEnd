@@ -75,7 +75,7 @@ router.put('/delete', async (req, res) => {
 router.delete('/',async (req,res) => {
   try {
     await News.findByIdAndDelete(
-      { _id: req.params._id }
+      { _id: req.body._id }
     );
     res.status(200).json('delete success!!');
   } catch (err) {
