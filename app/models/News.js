@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const NewsSchema = new mongoose.Schema(
   {
     Id_Writer: { type: mongoose.Schema.Types.ObjectId, ref: 'login' },
-    image: { type: String},
+    image: { type: String, require: true },
     Title: { type: String, require: true },
     Desc : {type : String, require : true},
     Ordinal: { type: Number, unique: true },
