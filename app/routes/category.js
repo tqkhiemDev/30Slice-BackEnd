@@ -38,7 +38,7 @@ router.post("/", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
   const newCategories = new Categories(req.body);
   try {
     const savedCategories = await newCategories.save();
-    res.status(201).json(savedCategories);
+    res.status(201).json({ message: "Đã thêm loại thành công !" });
   } catch (err) {
     if (err.code == 11000) {
       res.status(200).json({
@@ -60,7 +60,7 @@ router.put("/", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
       { $set: req.body },
       { new: true }
     );
-    res.status(201).json(updatedCategory);
+    res.status(201).json({ message: "Đã sửa loại thành công !" });
   } catch (err) {
     if (err.code == 11000) {
       res.status(200).json({

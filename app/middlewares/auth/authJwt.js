@@ -16,7 +16,6 @@ const catchError = (err, res) => {
 };
 
 const verifyToken = (req, res, next) => {
-  console.log(req.headers);
   const authorizationClient = req.headers['authorization'];
   const token = authorizationClient && authorizationClient.split(' ')[1];
   if (!token) {
