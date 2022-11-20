@@ -35,7 +35,7 @@ router.get('/getOneCategory/:id', async (req, res) => {
 });
 
 //them
-router.post('/',verifyTokenAndAdmin, async (req, res) => {
+router.post('/',[authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
   const newCategories = new Categories(req.body);
   try {
     const savedCategories = await newCategories.save();
@@ -59,18 +59,7 @@ router.put('/', [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
   }
 });
 
-//toggle isShow
-router.put('/changeHideOrShow',verifyTokenAndAdmin, async (req, res) => {
-  try {
-    const updatedCategory = await Categories.findOneAndUpdate(
-      { _id: req.body._id },
-      { Is_Show: req.body.Is_Show }
-    );
-    res.status(200).json('change success!!');
-  } catch (err) {
-    res.status(400).json(err);
-  }
-});
+
 // get all categories where parent is !null
 router.get('/getCategoriesParent', async (req, res) => {
   try {
