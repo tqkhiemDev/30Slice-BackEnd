@@ -58,6 +58,15 @@ router.put('/', [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
     res.status(400).json(err);
   }
 });
+// delte category
+router.delete('/', [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
+  try {
+    await Categories.findByIdAndDelete(req.query.id);
+    res.status(200).json('Đã xoá thành công!');
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
 
 
 // get all categories where parent is !null
