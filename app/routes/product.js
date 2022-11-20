@@ -84,7 +84,7 @@ router.get("/getOneProduct/:id", async (req, res) => {
 router.get("/getProducts", async (req, res) => {
   const page = req.query.page;
   const limit = req.query.limit;
-  const name = req.query.search;
+  const name = decodeURI(req.query.search);
   try {
     if (name) {
       const products = await Product.find({

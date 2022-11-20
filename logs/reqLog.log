@@ -79,3 +79,16 @@
 20221120	18:06:43	8a1ee746-d9e3-40c7-8f7f-600b8dc2a7fd	GET	/api/product/getProducts?page=1&limit=12&search=a	undefined
 20221120	18:07:05	672b0aa8-6d43-4c09-992f-91aedec1ba43	GET	/api/product/getProducts?page=1&limit=12&search=a	undefined
 20221120	18:07:16	37deaf68-195e-46fc-bb8a-887e297c45aa	GET	/api/product/getProducts?page=1&limit=12&search=a	undefined
+20221120	18:27:47	277a7d4c-da06-4961-9166-f1542d2955cc	GET	/api/product/getProducts?page=1&limit=12&search=%22n%C6%B0%E1%BB%9Bc%22	undefined
+20221120	18:28:06	7e311f0b-af03-49c8-b490-791df06f0357	GET	/api/product/getProducts?page=1&limit=12&search=%22n%C6%B0%E1%BB%9Bc%22	undefined
+20221120	18:29:12	89968f6f-bd6b-408b-b276-d60dc1eee2ed	GET	/api/product/getProducts?page=1&limit=12&search=%22n%C6%B0%E1%BB%9Bc%22	undefined
+20221120	18:29:43	ea6bb58e-abb8-4e60-bb5b-1a48f64040cd	GET	/api/product/getProducts?page=1&limit=12&search=%22n%C6%B0%E1%BB%9Bc%22	undefined
+20221120	18:29:51	02434dee-69f2-4cab-8ad6-f07a850705ae	GET	/api/product/getProducts?page=1&limit=12&search=%22n%C6%B0%E1%BB%9Bc%22	undefined
+20221120	18:30:13	a4446ece-ebd3-4570-bdbf-81176f0253fa	GET	/api/product/getProducts?page=1&limit=12&search=%22n%C6%B0%E1%BB%9Bc%22	undefined
+20221120	18:30:17	cf28b061-c73e-456e-9374-8b9cba9be74f	GET	/api/product/getProducts?page=1&limit=12&search=a	undefined
+20221120	18:30:26	b2a4311f-e069-4c73-86a2-f1cc713b566f	GET	/api/product/getProducts?page=1&limit=12&search=n%C6%B0%E1%BB%9Bc	undefined
+20221120	18:30:32	32845bf9-a90e-40d9-80fd-b7191040a0df	GET	/api/product/getProducts?page=1&limit=12&search=n%C6%B0%E1%BB%9Bc	undefined
+20221120	18:31:02	68224eae-03f7-458c-bfc7-0043ca560bd7	GET	/api/product/getProducts?page=1&limit=12&search=n%C6%B0%E1%BB%9Bc	undefined
+20221120	18:31:09	f5eb98a3-9fe8-49f1-9421-0a6543ad00e7	GET	/api/product/getProducts?page=1&limit=12&search=n%C6%B0%E1%BB%9Bc	undefined
+20221120	18:31:33	1f57939b-6baf-4d47-9659-f20250888ace	GET	/api/product/getProducts?page=1&limit=12&search=n%C6%B0%E1%BB%9Bc	undefined
+20221120	18:31:55	a0ac0d58-d96c-493a-95d0-8f2ba45d4b7e	GET	/api/product/getProducts?page=1&limit=12&search=n%C6%B0%E1%BB%9Bc	undefined
