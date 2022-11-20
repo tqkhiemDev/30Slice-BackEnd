@@ -68,8 +68,9 @@ router.put("/", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
           Object.values(err.keyValue)[0]
         } đã tồn tại!`,
       });
+    } else {
+      res.status(500).json(err);
     }
-    res.status(400).json(err);
   }
 });
 // delte category
