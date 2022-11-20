@@ -7,7 +7,7 @@ const router = require("express").Router();
 //show
 router.get("/getAllCategories", async (req, res) => {
   try {
-    const categories = await Categories.find();
+    const categories = await Categories.find().sort({ Ordinal: -1 });
     res.status(200).json(categories);
   } catch (err) {
     res.status(400).json(err);
@@ -16,7 +16,7 @@ router.get("/getAllCategories", async (req, res) => {
 // get all categories where Is_Show is true
 router.get("/getCategories", async (req, res) => {
   try {
-    const categories = await Categories.find({ Is_Show: true });
+    const categories = await Categories.find({ Is_Show: true }).sort({ Ordinal: -1 });;
     res.status(200).json(categories);
   } catch (err) {
     res.status(400).json(err);
@@ -86,7 +86,7 @@ router.delete("/", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
 // get all categories where parent is !null
 router.get("/getCategoriesParent", async (req, res) => {
   try {
-    const categories = await Categories.find({ Parent_Id: null });
+    const categories = await Categories.find({ Parent_Id: null }).sort({ Ordinal: -1 });;
     res.status(200).json(categories);
   } catch (err) {
     res.status(400).json(err);

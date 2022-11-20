@@ -44,7 +44,7 @@ router.put("/changeHideOrShow", verifyTokenAndAdmin, async (req, res) => {
 //show
 router.get("/getAllProducts", async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find().sort({ createdAt: -1 });
     res.status(200).json(products);
   } catch (err) {
     res.status(400).json(err);
@@ -58,7 +58,7 @@ router.get("/getProductsByCategory/:id", async (req, res) => {
     const products = await Product.find({
       Id_Categories: Id_Categories,
       Is_Show: true,
-    });
+    }).sort({ createdAt: -1 });
     res.status(200).json(products);
   } catch (err) {
     res.status(400).json(err);
@@ -87,7 +87,7 @@ router.get("/getProducts", async (req, res) => {
   const totalItem = await Product.countDocuments();
   const totalPage = Math.ceil(totalItem / limit);
   try {
-    const products = await Product.find({ Is_Show: true })
+    const products = await Product.find({ Is_Show: true }).sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit * 1);
     res.status(200).json({ totalItem, totalPage, products });

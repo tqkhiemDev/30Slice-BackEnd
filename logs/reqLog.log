@@ -44,3 +44,6 @@
 20221120	13:50:43	0c1c0850-2004-42b4-b9c2-b2d76dbfb033	POST	/api/category	undefined
 20221120	13:50:50	9a8f0ef4-1b8b-43ac-8ce4-4df763054a20	POST	/api/category	undefined
 20221120	13:51:42	0d49b645-b918-4f1d-b61e-163825bc39b9	POST	/api/category	undefined
+20221120	17:13:18	d3859e33-789d-444a-9f26-a48cc1784371	GET	/api/product/getAllProducts	undefined
+20221120	17:13:38	635bf39d-b42a-4774-a5e0-5ffe6627e915	GET	/api/product/getAllProducts	undefined
+20221120	17:14:25	9a7ed2cd-f570-42f5-b1fe-1768fcbb344b	GET	/api/product/getProducts?page=1&limit=3	undefined
