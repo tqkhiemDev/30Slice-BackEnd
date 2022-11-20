@@ -71,3 +71,11 @@
 20221120	17:54:31	dcce5405-2124-4c43-ae42-60e721ee1557	GET	/api/product/getProducts?page=1&limit=12&search=%22a%22	undefined
 20221120	17:54:33	0e6b95bd-0fdc-4017-8323-4994e24f1685	GET	/api/product/getProducts?page=1&limit=12&search=%22a%22	undefined
 20221120	17:54:40	3808235a-a7fb-4dd2-bda2-a3d8d65dc883	GET	/api/product/getProducts?page=1&limit=12&search=%22a%22	undefined
+20221120	18:05:08	563b15c0-ccba-4100-999f-8214106fcc2f	GET	/api/product/getProducts?page=1&limit=12&search=a	undefined
+20221120	18:05:54	93960025-97a1-4980-8e03-8bc0d63ab194	GET	/api/product/getProducts?page=1&limit=12&search=a	undefined
+20221120	18:06:13	f595f68d-f8f3-4283-885b-eabb555ea55d	GET	/api/product/getProducts?page=1&limit=12&search=a	undefined
+20221120	18:06:20	2989f691-03ca-449c-bdb9-692e160a64a6	GET	/api/product/getProducts?page=1&limit=12	undefined
+20221120	18:06:32	278ecdc7-b104-4d89-8c78-440184ee7a2f	GET	/api/product/getProducts?page=1&limit=12&search=a	undefined
+20221120	18:06:43	8a1ee746-d9e3-40c7-8f7f-600b8dc2a7fd	GET	/api/product/getProducts?page=1&limit=12&search=a	undefined
+20221120	18:07:05	672b0aa8-6d43-4c09-992f-91aedec1ba43	GET	/api/product/getProducts?page=1&limit=12&search=a	undefined
+20221120	18:07:16	37deaf68-195e-46fc-bb8a-887e297c45aa	GET	/api/product/getProducts?page=1&limit=12&search=a	undefined

@@ -94,7 +94,9 @@ router.get("/getProducts", async (req, res) => {
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
         .limit(limit * 1);
-      const totalItem = await products.length;
+      const totalItem = await Product.countDocuments({
+        Name: { $regex: name, $options: "i" },
+      });
       const totalPage = Math.ceil(totalItem / limit);
       res.status(200).json({ totalItem, totalPage, products });
     } else {
