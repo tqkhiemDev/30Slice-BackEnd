@@ -16,7 +16,7 @@ router.get("/getAllCategories", async (req, res) => {
 // get all categories where Is_Show is true
 router.get("/getCategories", async (req, res) => {
   try {
-    const categories = await Categories.find({ Is_Show: true }).sort({ Ordinal: -1 });;
+    const categories = await Categories.find({ Is_Show: true }).sort({ Ordinal: 1 });;
     res.status(200).json(categories);
   } catch (err) {
     res.status(400).json(err);
