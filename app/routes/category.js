@@ -16,7 +16,9 @@ router.get("/getAllCategories", async (req, res) => {
 // get all categories where Is_Show is true
 router.get("/getCategories", async (req, res) => {
   try {
-    const categories = await Categories.find({ Is_Show: true }).sort({ Ordinal: -1 });;
+    const categories = await Categories.find({ Is_Show: true }).sort({
+      Ordinal: -1,
+    });
     res.status(200).json(categories);
   } catch (err) {
     res.status(400).json(err);
@@ -35,9 +37,9 @@ router.get("/getOneCategory/:id", async (req, res) => {
 
 //them
 router.post("/", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
-  const newCategories = new Categories(req.body);
   try {
-    const savedCategories = await newCategories.save();
+    const newCategories = new Categories(req.body);
+
     res.status(201).json({ message: "Đã thêm loại thành công !" });
   } catch (err) {
     if (err.code == 11000) {
@@ -86,7 +88,9 @@ router.delete("/", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
 // get all categories where parent is !null
 router.get("/getCategoriesParent", async (req, res) => {
   try {
-    const categories = await Categories.find({ Parent_Id: null }).sort({ Ordinal: -1 });;
+    const categories = await Categories.find({ Parent_Id: null }).sort({
+      Ordinal: -1,
+    });
     res.status(200).json(categories);
   } catch (err) {
     res.status(400).json(err);
