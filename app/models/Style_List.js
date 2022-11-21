@@ -6,7 +6,7 @@ const Style_ListSchema = new mongoose.Schema(
     Shifts: { type: Array, required: true },
     Status_Code: { type: Boolean,  default: true },
     Status: { type: String, required: true, default: 'active' },
-    Block_By_Admin: { type: Boolean, default: true },
+    Block_By_Admin: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
