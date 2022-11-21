@@ -92,3 +92,4 @@
 20221120	18:31:09	f5eb98a3-9fe8-49f1-9421-0a6543ad00e7	GET	/api/product/getProducts?page=1&limit=12&search=n%C6%B0%E1%BB%9Bc	undefined
 20221120	18:31:33	1f57939b-6baf-4d47-9659-f20250888ace	GET	/api/product/getProducts?page=1&limit=12&search=n%C6%B0%E1%BB%9Bc	undefined
 20221120	18:31:55	a0ac0d58-d96c-493a-95d0-8f2ba45d4b7e	GET	/api/product/getProducts?page=1&limit=12&search=n%C6%B0%E1%BB%9Bc	undefined
+20221121	13:58:58	76d8557e-6d7f-472d-bef3-3d7dfa3fa58a	GET	/api/stylelist/gettAllStyleList	undefined
