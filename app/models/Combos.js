@@ -6,6 +6,7 @@ const CombosSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "products",
+        required: true,
       },
     ],
     Name: { type: String, required: true },

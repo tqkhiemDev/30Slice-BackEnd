@@ -4,7 +4,7 @@ const router = require('express').Router();
 
 // add bookings to the database
 router.post('/', async (req, res) => {
-  const newCombos = new Booking(req.body);
+  const newCombos = new Combos(req.body);
   try {
     const saveCombos = await newCombos.save();
     res.status(200).json(saveCombos);
