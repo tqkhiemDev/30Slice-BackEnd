@@ -44,7 +44,7 @@ router.put("/changeHideOrShow", verifyTokenAndAdmin, async (req, res) => {
 //show
 router.get("/getAllProducts", async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find().sort({ createdAt: -1 });
     res.status(200).json(products);
   } catch (err) {
     res.status(400).json(err);
@@ -58,7 +58,7 @@ router.get("/getProductsByCategory/:id", async (req, res) => {
     const products = await Product.find({
       Id_Categories: Id_Categories,
       Is_Show: true,
-    });
+    }).sort({ createdAt: -1 });
     res.status(200).json(products);
   } catch (err) {
     res.status(400).json(err);
@@ -84,13 +84,30 @@ router.get("/getOneProduct/:id", async (req, res) => {
 router.get("/getProducts", async (req, res) => {
   const page = req.query.page;
   const limit = req.query.limit;
-  const totalItem = await Product.countDocuments();
-  const totalPage = Math.ceil(totalItem / limit);
+  const name = decodeURI(req.query.search);
   try {
-    const products = await Product.find({ Is_Show: true })
-      .skip((page - 1) * limit)
-      .limit(limit * 1);
-    res.status(200).json({ totalItem, totalPage, products });
+    if (name) {
+      const products = await Product.find({
+        Name: { $regex: name, $options: "i" },
+        Is_Show: true,
+      })
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit * 1);
+      const totalItem = await Product.countDocuments({
+        Name: { $regex: name, $options: "i" },
+      });
+      const totalPage = Math.ceil(totalItem / limit);
+      res.status(200).json({ totalItem, totalPage, products });
+    } else {
+      const totalItem = await Product.countDocuments();
+      const totalPage = Math.ceil(totalItem / limit);
+      const products = await Product.find({ Is_Show: true })
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit * 1);
+      res.status(200).json({ totalItem, totalPage, products });
+    }
   } catch (err) {
     res.status(400).json(err);
   }

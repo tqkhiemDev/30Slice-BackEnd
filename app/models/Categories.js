@@ -6,7 +6,7 @@ const CategoriesSchema = new mongoose.Schema(
     Ordinal: { type: Number, required: true, unique: true },
     Is_Show: { type: Boolean, required: true },
     Parent_Id: { type: String, default: null },
-    isCatProducts: { type: Boolean, required: true },
+    isCatProducts: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
