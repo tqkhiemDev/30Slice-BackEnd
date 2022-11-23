@@ -22,7 +22,7 @@ const styleListRoute = require('./app/routes/stylelist');
 const productRoute = require('./app/routes/product');
 const newsRoute = require('./app/routes/news');
 const bookingRoute = require('./app/routes/booking');
-const combosRoute = require('./app/routes/combos');
+const comboRoute = require('./app/routes/combos');
 
 app.use('/api/order', orderRoute);
 app.use('/api/user', userRoute);
@@ -33,7 +33,7 @@ app.use('/api/stylelist', styleListRoute);
 app.use('/api/product', productRoute);
 app.use('/api/news', newsRoute);
 app.use('/api/booking', bookingRoute);
-app.use('/api/combos', combosRoute);
+app.use('/api/combo', comboRoute);
 
 // Refresh token
 const authRoute = require('./app/routes/auth/auth.routes');
