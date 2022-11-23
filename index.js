@@ -22,7 +22,7 @@ const styleListRoute = require('./app/routes/stylelist');
 const productRoute = require('./app/routes/product');
 const newsRoute = require('./app/routes/news');
 const bookingRoute = require('./app/routes/booking');
-const comboRoute = require('./app/routes/combo');
+const comboRoute = require('./app/routes/combos');
 
 app.use('/api/order', orderRoute);
 app.use('/api/user', userRoute);
