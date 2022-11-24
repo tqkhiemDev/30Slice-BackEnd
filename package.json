@@ -23,7 +23,9 @@
     "mongodb": "^4.9.0",
     "mongoose": "^6.5.3",
     "node-mailjet": "^5.1.1",
-    "nodemon": "^2.0.19",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }
