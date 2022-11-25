@@ -51,8 +51,8 @@ router.post("/booking", async (req, res) => {
       });
     } else {
       res
-        .status(401)
-        .json({ message: "Số điện thoại này chưa đăng ký", status_code: 404 });
+        .status(204)
+        .json({ message: "Số điện thoại này chưa đăng ký", status_code: 204 });
     }
   } catch (err) {
     res.status(500).json(err);
