@@ -1,9 +1,9 @@
 const Login = require("../models/Login");
 const Customer = require("../models/Customer");
 const router = require("express").Router();
-const jwt = require('jsonwebtoken');
-const fs = require('fs');
-const PRIVATE_KEY = fs.readFileSync('./private-key.txt');
+const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const PRIVATE_KEY = fs.readFileSync("./private-key.txt");
 function makeid(length) {
   var result = "";
   var characters =
@@ -27,6 +27,7 @@ router.post("/register", async (req, res) => {
     const user = await newUser.save();
     const newCustomer = new Customer({
       Id_User: user._id,
+      isSignUp: false,
     });
     const customer = await newCustomer.save();
     let respon = {
@@ -38,6 +39,13 @@ router.post("/register", async (req, res) => {
   } catch (err) {
     res.status(500).json(err);
   }
+});
+// customer sign up
+router.post("/signup", async (req, res) => {
+  try {
+    const isSignUp = await Customer.findOne({ Phone: req.body.phone,isSignUp: false });
+    console.log(isSignUp);
+  } catch (err) {}
 });
 // booking by customer
 router.post("/booking", async (req, res) => {
@@ -58,51 +66,49 @@ router.post("/booking", async (req, res) => {
     res.status(500).json(err);
   }
 });
-// user sign up
-router.post("/signup", async (req, res) => {
-  try {
-    const newUser = new Login({
-      Username: req.body.username,
-      Password: req.body.password,
-      Email: req.body.email,
-      Full_Name: req.body.full_name,
-      Phone: req.body.phone,
-    });
-    const user = await newUser.save();
-    const newCustomer = new Customer({
-      Id_User: user._id,
-    });
-    const customer = await newCustomer.save();
-    const { Password , ...other} = user._doc
+// // user sign up
+// router.post("/signup", async (req, res) => {
+//   try {
+//     const newUser = new Login({
+//       Username: req.body.username,
+//       Password: req.body.password,
+//       Email: req.body.email,
+//       Full_Name: req.body.full_name,
+//       Phone: req.body.phone,
+//     });
+//     const user = await newUser.save();
+//     const newCustomer = new Customer({
+//       Id_User: user._id,
+//     });
+//     const customer = await newCustomer.save();
+//     const { Password , ...other} = user._doc
 
- 
-
-    res.status(200).json(other);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+//     res.status(200).json(other);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 // user sign in
-router.post("/signin", async (req, res) => {
-  try {
-    const user = await Login.findOne({ Username: req.body.username });
-    if (user) {
-      // statement
-      if ( user.Password !== req.body.password ){
-        res.status(401).json({"message": "Thông tin đăng nhập không đúng.","status_code": 401});
-      }else{
-        const accessToken = jwt.sign(
-          { id: user._id,role: user.Role },PRIVATE_KEY,{ expiresIn: "12h" });
-        res.status(200).json({ accessToken,role: user.Role,username: user.Username });
-      }
-    }else{
-      res.status(401).json({"message": "Thông tin đăng nhập không đúng.","status_code": 401});
-    }
-  }
-  catch(e){
-    console.log(e)
-    res.status(500).json(e);
-  }
-});
+// router.post("/signin", async (req, res) => {
+//   try {
+//     const user = await Login.findOne({ Username: req.body.username });
+//     if (user) {
+//       // statement
+//       if ( user.Password !== req.body.password ){
+//         res.status(401).json({"message": "Thông tin đăng nhập không đúng.","status_code": 401});
+//       }else{
+//         const accessToken = jwt.sign(
+//           { id: user._id,role: user.Role },PRIVATE_KEY,{ expiresIn: "12h" });
+//         res.status(200).json({ accessToken,role: user.Role,username: user.Username });
+//       }
+//     }else{
+//       res.status(401).json({"message": "Thông tin đăng nhập không đúng.","status_code": 401});
+//     }
+//   }
+//   catch(e){
+//     console.log(e)
+//     res.status(500).json(e);
+//   }
+// });
 
 module.exports = router;
