@@ -4,6 +4,8 @@ const router = require("express").Router();
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const PRIVATE_KEY = fs.readFileSync("./private-key.txt");
+const bcrypt = require("bcrypt");
+
 function makeid(length) {
   var result = "";
   var characters =
@@ -43,9 +45,54 @@ router.post("/register", async (req, res) => {
 // customer sign up
 router.post("/signup", async (req, res) => {
   try {
-    const isSignUp = await Customer.findOne({ Phone: req.body.phone,isSignUp: false });
+    const isSignUp = await Customer.findOne({
+      Phone: req.body.phone,
+      isSignUp: false,
+    });
     console.log(isSignUp);
-  } catch (err) {}
+    if (isSignUp) {
+      const user = await Login.findByIdAndUpdate(
+        isSignUp.Id_User,
+        {
+          $set: {
+            Username: req.body.username,
+            Password: bcrypt.hashSync(req.body.password, 8),
+            Email: req.body.email,
+            Full_Name: req.body.full_name,
+            isSignUp: true,
+          },
+        },
+        { new: true }
+      );
+      const customer = await Customer.findByIdAndUpdate(
+        isSignUp._id,
+        {
+          $set: {
+            isSignUp: true,
+          },
+        },
+        { new: true }
+      );
+      res.status(200).json(user);
+    } else {
+      const newUser = new Login({
+        Username: req.body.username,
+        Password: bcrypt.hashSync(req.body.password, 8),
+        Email: req.body.email,
+        Full_Name: req.body.full_name,
+        Phone: req.body.phone,
+      });
+      const user = await newUser.save();
+      const newCustomer = new Customer({
+        Id_User: user._id,
+        isSignUp: true,
+      });
+      const customer = await newCustomer.save();
+      res.status(200).json(user);
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 // booking by customer
 router.post("/booking", async (req, res) => {
