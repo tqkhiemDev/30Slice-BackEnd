@@ -39,7 +39,7 @@ router.get("/getOneCategory/:id", async (req, res) => {
 router.post("/", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
   try {
     const newCategories = new Categories(req.body);
-
+    const category = await newCategories.save();
     res.status(201).json({ message: "Đã thêm loại thành công !" });
   } catch (err) {
     if (err.code == 11000) {
