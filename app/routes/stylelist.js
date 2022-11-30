@@ -5,7 +5,7 @@ const router = require("express").Router();
 const { authJwt } = require("../middlewares/auth");
 
 // join stylelist data with login data using lookup
-router.get("/gettAllStyleList", async (req, res) => {
+router.get("/gettAllStyleList",[authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
   try {
     const data = await Login.aggregate([
       {
@@ -81,6 +81,8 @@ router.get("/getAvailableEmployee", async (req, res) => {
       {
         $match: {
           Role: "styleList",
+          "Info.Status_Code": true,
+          "Info.Block_By_Admin": false,
         },
       },
       {
