@@ -20,13 +20,13 @@ const mailjet = new Mailjet({
 
 // register by admin
 router.post(
-  "/register",
+  "/addUser",
   [authJwt.verifyToken, authJwt.isAdmin],
   async (req, res) => {
     try {
       const newUser = new Login({
         Username: req.body.username,
-        Password: req.body.password,
+        Password: bcrypt.hashSync(req.body.password, 8),
         Full_Name: req.body.full_name,
         Email: req.body.email,
         Phone: req.body.phone,
@@ -37,17 +37,17 @@ router.post(
         case "styleList":
           const newStyle_List = new Style_List({
             Id_User: user._id,
-            Shifts: [],
+            Shifts: req.body.shifts,
           });
           const style_list = await newStyle_List.save();
-
           break;
         case "writer":
           break;
         default:
       }
-
-      res.status(200).json(user);
+      res
+        .status(200)
+        .json({ message: `Đã thêm thành công người dùng ${newUser.Username}` });
     } catch (err) {
       if (err.code == 11000) {
         res.status(400).json({

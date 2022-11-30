@@ -3,6 +3,7 @@ const StyleList = require("../models/Style_List");
 const Booking = require("../models/Booking");
 const router = require("express").Router();
 const { authJwt } = require("../middlewares/auth");
+const bcrypt = require("bcrypt");
 
 // join stylelist data with login data using lookup
 router.get("/gettAllStyleList",[authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
@@ -119,7 +120,7 @@ router.get("/getAvailableEmployee", async (req, res) => {
     res.status(400).json(err);
   }
 });
-
+// update stylelist
 router.put("/", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
   try {
     const data = await StyleList.findByIdAndUpdate(req.body._id, req.body, {
@@ -130,5 +131,33 @@ router.put("/", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
     res.status(400).json(err);
   }
 });
+// add stylelist
+router.post("/", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.Password, salt);
+    const login = new Login({
+      Username: req.body.Username,
+      Password: hashedPassword,
+      Role: "styleList",
+    });
+    const data = await login.save();
+    const stylelist = new StyleList({
+      Id_User: data._id,
+      Name: req.body.Name,
+      Phone: req.body.Phone,
+      Address: req.body.Address,
+      Shifts: req.body.Shifts,
+      Status_Code: req.body.Status_Code,
+      Block_By_Admin: req.body.Block_By_Admin,
+    });
+    const data2 = await stylelist.save();
+    res.status(200).json(data2);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
+
 
 module.exports = router;
