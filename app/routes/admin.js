@@ -46,15 +46,14 @@ router.post(
         default:
       }
       res
-        .status(200)
+        .status(201)
         .json({ message: `Đã thêm thành công người dùng ${newUser.Username}` });
     } catch (err) {
       if (err.code == 11000) {
-        res.status(400).json({
+        res.status(200).json({
           message: `${Object.keys(err.keyValue)[0]} ${
             Object.values(err.keyValue)[0]
           } đã tồn tại`,
-          status_code: 400,
         });
       } else {
         res.status(500).json(err);
