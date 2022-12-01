@@ -15,3 +15,6 @@
 20221114	00:30:55	f9172e61-5fbc-48d3-bc8f-a89fd128ab52	Too Many Requests: Too many login attempts from this IP, please try again after a 60 second pause	POST	/signin	http://localhost:8081
 20221114	00:30:55	467ad4c2-202c-417e-8d5f-503ef9031a29	Too Many Requests: Too many login attempts from this IP, please try again after a 60 second pause	POST	/signin	http://localhost:8081
 20221114	00:30:56	62d75ec2-9f5d-4a8a-871c-e733ff39c915	Too Many Requests: Too many login attempts from this IP, please try again after a 60 second pause	POST	/signin	http://localhost:8081
+20221122	12:45:21	f5730908-712a-4fe5-ae05-de1a1d63a7d4	SyntaxError: Unexpected token ` in JSON at position 417	POST	/api/news	undefined
+20221122	12:45:48	e81f424a-f905-428d-903b-d0289b52c0af	SyntaxError: Unexpected token ' in JSON at position 417	POST	/api/news	undefined
+20221122	13:08:27	154d0f55-073f-44ce-bff1-a5df06b3469a	SyntaxError: Unexpected token } in JSON at position 433	POST	/api/combos	undefined
