@@ -3,6 +3,7 @@ const Order = require("../models/Order");
 const querystring = require("qs");
 const crypto = require("crypto");
 const dateFormat = require("dateformat");
+const mongoose = require("mongoose");
 
 function sortObject(obj) {
   var sorted = {};
@@ -42,7 +43,7 @@ router.get("/getOneOrder/:id", async (req, res) => {
       },
       {
         $match: {
-          _id: req.params.id,
+          _id: new mongoose.Types.ObjectId(req.params.id),
         },
       },
       {
@@ -50,6 +51,9 @@ router.get("/getOneOrder/:id", async (req, res) => {
       },
       {
         $project: {
+          IsCustomer_Delete : 0,
+          IsAdmin_Delete : 0,
+          __v : 0,
           "Info.Password": 0,
           "Info.__v": 0,
           "Info.createdAt": 0,
