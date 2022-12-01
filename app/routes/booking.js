@@ -55,6 +55,12 @@ router.get("/getHistoryBooking", authJwt.verifyToken, async (req, res) => {
         },
       },
       {
+        $unwind: {
+          path: "$Service",
+        },
+      },
+
+      {
         $project: {
           Id_Style_List: 0,
           __v: 0,
