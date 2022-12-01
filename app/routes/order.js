@@ -4,6 +4,7 @@ const querystring = require("qs");
 const crypto = require("crypto");
 const dateFormat = require("dateformat");
 const mongoose = require("mongoose");
+const { authJwt } = require("../middlewares/auth");
 
 function sortObject(obj) {
   var sorted = {};
@@ -71,10 +72,10 @@ router.get("/getOneOrder/:id", async (req, res) => {
 });
 
 //get by customer
-router.get("/getOrdersByCustomer", async (req, res) => {
+router.get("/getOrdersByCustomer",authJwt.verifyToken, async (req, res) => {
   try {
     const orders = await Order.find({
-      Id_Customer: req.body._id,
+      Id_Customer: req.userId,
     });
     res.status(200).json(orders);
   } catch (err) {
