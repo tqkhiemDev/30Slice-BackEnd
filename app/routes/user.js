@@ -140,6 +140,25 @@ router.put("/change-password", authJwt.verifyToken, async (req, res) => {
     res.status(500).json(err);
   }
 });
+// change info 
+router.put("/change-info", authJwt.verifyToken, async (req, res) => {
+  try {
+    const user = await Login.findOne({ _id: req.userId });
+    if (user) {
+      // statement
+      user.Full_Name = req.body.name;
+      user.Phone = req.body.phone;
+      user.Username = req.body.username;
+      user.Email = req.body.email;
+      await user.save();
+      res.status(201).json({ message: "Đổi thông tin thành công" });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
 // // user sign up
 // router.post("/signup", async (req, res) => {
 //   try {
