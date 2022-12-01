@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const PRIVATE_KEY = fs.readFileSync("./private-key.txt");
 const bcrypt = require("bcrypt");
+const { authJwt } = require("../middlewares/auth");
 
 function makeid(length) {
   var result = "";
@@ -108,6 +109,32 @@ router.post("/booking", async (req, res) => {
       res
         .status(204)
         .json({ message: "Số điện thoại này chưa đăng ký", status_code: 204 });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.put("/change-password", authJwt.verifyToken, async (req, res) => {
+  console.log(req.userId);
+  try {
+    const user = await Login.findOne({ _id: req.userId });
+    if (user) {
+      // statement
+      const passwordIsValid = bcrypt.compareSync(
+        req.body.old_password,
+        user.Password
+      );
+      // console.log(passwordIsValid);
+      if (!passwordIsValid) {
+        res.status(200).json({
+          message: "Mật khẩu cũ không đúng.",
+        });
+      } else {
+        user.Password = bcrypt.hashSync(req.body.new_password, 8);
+        await user.save();
+        res.status(201).json({ message: "Đổi mật khẩu thành công" });
+      }
     }
   } catch (err) {
     res.status(500).json(err);
