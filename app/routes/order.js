@@ -29,7 +29,7 @@ router.get("/getAllOrders", async (req, res) => {
     res.status(400).json(err);
   }
 });
-// get one order using aggregate
+
 router.get("/getOneOrder/:id", async (req, res) => {
   try {
     const order = await Order.aggregate([
@@ -47,7 +47,10 @@ router.get("/getOneOrder/:id", async (req, res) => {
         },
       },
       {
-        $unwind: "$Info",
+        $unwind: {
+          path: "$Info",
+        }
+        
       },
       {
         $project: {
@@ -61,7 +64,7 @@ router.get("/getOneOrder/:id", async (req, res) => {
         },
       },
     ]);
-    res.status(200).json(order);
+    res.status(200).json(order[0]);
   } catch (err) {
     res.status(400).json(err);
   }
@@ -167,5 +170,6 @@ router.post("/create_payment_url", function (req, res, next) {
 
   res.status(200).json(vnpUrl);
 });
+
 
 module.exports = router;
