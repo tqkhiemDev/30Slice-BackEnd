@@ -133,23 +133,23 @@ router.post("/orderVnpay", async (req, res, next) => {
   const newOrder = new Order(req.body);
   try {
     const savedOrder = await newOrder.save();
-    var ipAddr =
+    let ipAddr =
       req.headers["x-forwarded-for"] ||
       req.connection.remoteAddress ||
       req.socket.remoteAddress ||
       req.connection.socket.remoteAddress;
     // console.log(ipAddr);
 
-    var tmnCode = process.env.vnp_TmnCode;
-    var secretKey = process.env.vnp_HashSecret;
-    var vnpUrl = process.env.vnp_Url;
-    var returnUrl = process.env.vnp_ReturnUrl;
-    var date = new Date();
+    let tmnCode = process.env.vnp_TmnCode;
+    let secretKey = process.env.vnp_HashSecret;
+    let vnpUrl = process.env.vnp_Url;
+    let returnUrl = process.env.vnp_ReturnUrl;
+    let date = new Date();
 
-    var createDate = dateFormat(date, "yyyymmddHHmmss");
-    var orderId = savedOrder._id;
+    let createDate = dateFormat(date, "yyyymmddHHmmss");
+    let orderId = savedOrder._id;
 
-    var vnp_Params = {};
+    let vnp_Params = {};
     vnp_Params["vnp_Version"] = "2.1.0";
     vnp_Params["vnp_Command"] = "pay";
     vnp_Params["vnp_TmnCode"] = tmnCode;
@@ -165,9 +165,9 @@ router.post("/orderVnpay", async (req, res, next) => {
 
     vnp_Params = sortObject(vnp_Params);
 
-    var signData = querystring.stringify(vnp_Params, { encode: false });
-    var hmac = crypto.createHmac("sha512", secretKey);
-    var signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
+    let signData = querystring.stringify(vnp_Params, { encode: false });
+    let hmac = crypto.createHmac("sha512", secretKey);
+    let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
     vnp_Params["vnp_SecureHash"] = signed;
     vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
     res.status(200).json(vnpUrl);
@@ -175,26 +175,25 @@ router.post("/orderVnpay", async (req, res, next) => {
     res.status(400).json(err);
   }
 });
-router.get("/vnpay_return", async (req, res, next) => {
+router.get("/vnpay_return", async (req, res) => {
   try {
-    var vnp_Params = req.query;
-    var secureHash = vnp_Params["vnp_SecureHash"];
+    let vnp_Params = req.query;
+    let secureHash = vnp_Params["vnp_SecureHash"];
     delete vnp_Params["vnp_SecureHash"];
     delete vnp_Params["vnp_SecureHashType"];
     vnp_Params = sortObject(vnp_Params);
-    var tmnCode = process.env.vnp_TmnCode;
-    var secretKey = process.env.vnp_HashSecret;
-    var signData = querystring.stringify(vnp_Params, { encode: false });
-
-    var hmac = crypto.createHmac("sha512", secretKey);
-    var signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
-
+    let secretKey = process.env.vnp_HashSecret;
+    let signData = querystring.stringify(vnp_Params, { encode: false });
+    let hmac = crypto.createHmac("sha512", secretKey);
+    let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
     if (secureHash === signed) {
-      //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-
-      res.render("success", { code: vnp_Params["vnp_ResponseCode"] });
+      let orderId = vnp_Params["vnp_TxnRef"];
+      let rspCode = vnp_Params["vnp_ResponseCode"];
+      console.log(orderId);
+      //Kiem tra du lieu co hop le khong, cap nhat trang thai don hang va gui ket qua cho VNPAY theo dinh dang duoi
+      res.status(200).json({ RspCode: "00", Message: "success" });
     } else {
-      res.render("success", { code: "97" });
+      res.status(200).json({ RspCode: "97", Message: "Fail checksum" });
     }
   } catch (err) {
     res.status(400).json(err);
