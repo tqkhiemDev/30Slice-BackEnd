@@ -1,11 +1,37 @@
-const News = require('../models/News');
+const News = require("../models/News");
 
-const router = require('express').Router();
+const router = require("express").Router();
 
 //show all
-router.get('/getAllNews', async (req, res) => {
+router.get("/getAllNews", async (req, res) => {
   try {
-    const news = await News.find();
+    const news = await News.aggregate([
+      {
+        $lookup: {
+          from: "logins",
+          localField: "Create_By",
+          foreignField: "_id",
+          as: "Create_By",
+        },
+      },
+      {
+        $unwind: "$Create_By",
+      },
+      {
+        $project: {
+          __v: 0,
+          Create_By: {
+            __v: 0,
+            Password: 0,
+            createdAt: 0,
+            updatedAt: 0,
+            _id: 0,
+            Email : 0,
+            Phone : 0,
+          },
+        },
+      },
+    ]);
     res.status(200).json(news);
   } catch (err) {
     res.status(400).json(err);
@@ -13,7 +39,7 @@ router.get('/getAllNews', async (req, res) => {
 });
 
 //show by category
-router.get('/getNewsByCategory/:id', async (req, res) => {
+router.get("/getNewsByCategory/:id", async (req, res) => {
   const Id_Categories = req.params.id;
   try {
     const news = await News.find({ Id_Categories: Id_Categories });
@@ -24,7 +50,7 @@ router.get('/getNewsByCategory/:id', async (req, res) => {
 });
 
 //show 1
-router.get('/getOneNews/:id', async (req, res) => {
+router.get("/getOneNews/:id", async (req, res) => {
   try {
     const news = await News.findById(req.params.id);
     res.status(200).json(news);
@@ -34,7 +60,7 @@ router.get('/getOneNews/:id', async (req, res) => {
 });
 
 //them
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   const newNews = new News(req.body);
   try {
     const savedNews = await newNews.save();
@@ -46,7 +72,7 @@ router.post('/', async (req, res) => {
 });
 
 //sua
-router.put('/', async (req, res) => {
+router.put("/", async (req, res) => {
   try {
     const updatedNews = await News.findByIdAndUpdate(
       req.body._id,
@@ -60,26 +86,24 @@ router.put('/', async (req, res) => {
 });
 
 //xoa
-router.put('/delete', async (req, res) => {
+router.put("/delete", async (req, res) => {
   try {
     await News.findOneAndUpdate(
       { _id: req.body._id },
       { Is_Delete: req.body.Is_Delete }
     );
-    res.status(200).json('delete success!!');
+    res.status(200).json("delete success!!");
   } catch (err) {
     res.status(400).json(err);
   }
 });
 
-router.delete('/',async (req,res) => {
+router.delete("/", async (req, res) => {
   try {
-    await News.findByIdAndDelete(
-      { _id: req.body._id }
-    );
-    res.status(200).json('delete success!!');
+    await News.findByIdAndDelete({ _id: req.body._id });
+    res.status(200).json("delete success!!");
   } catch (err) {
     res.status(400).json(err);
   }
-})
+});
 module.exports = router;
