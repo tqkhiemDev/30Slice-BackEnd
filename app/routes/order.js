@@ -190,8 +190,13 @@ router.get("/vnpay_return", async (req, res) => {
       let orderId = vnp_Params["vnp_TxnRef"];
       let rspCode = vnp_Params["vnp_ResponseCode"];
       console.log(orderId);
+      const order = await Order.findByIdAndUpdate(orderId, {
+        Payment_Status: "completed",
+      });
+      res.status(200).redirect("http://localhost:3100/order-success?order_id="+orderId);
+
       //Kiem tra du lieu co hop le khong, cap nhat trang thai don hang va gui ket qua cho VNPAY theo dinh dang duoi
-      res.status(200).json({ RspCode: "00", Message: "success" });
+      // res.status(200).json({ RspCode: "00", Message: "success" });
     } else {
       res.status(200).json({ RspCode: "97", Message: "Fail checksum" });
     }
