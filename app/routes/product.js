@@ -1,10 +1,11 @@
 const Product = require("../models/Product");
-const { verifyTokenAndAdmin } = require("../middlewares/verifyToken");
+const { authJwt } = require("../middlewares/auth");
+
 
 const router = require("express").Router();
 
 //them
-router.post("/", verifyTokenAndAdmin, async (req, res) => {
+router.post("/", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
   const newProduct = new Product(req.body);
   try {
     const savedProduct = await newProduct.save();
@@ -15,7 +16,7 @@ router.post("/", verifyTokenAndAdmin, async (req, res) => {
 });
 
 //sua
-router.put("/", verifyTokenAndAdmin, async (req, res) => {
+router.put("/", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
   try {
     const updatedProduct = await Product.findByIdAndUpdate(
       req.body._id,
@@ -29,7 +30,7 @@ router.put("/", verifyTokenAndAdmin, async (req, res) => {
 });
 
 //toggle isShow
-router.put("/changeHideOrShow", verifyTokenAndAdmin, async (req, res) => {
+router.put("/changeHideOrShow", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
   try {
     const updatedProduct = await Product.findOneAndUpdate(
       { _id: req.body._id },
