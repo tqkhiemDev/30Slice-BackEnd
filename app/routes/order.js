@@ -1,11 +1,10 @@
 const router = require("express").Router();
 const Order = require("../models/Order");
 const querystring = require("qs");
-const crypto = require("crypto");
 const dateFormat = require("dateformat");
 const mongoose = require("mongoose");
 const { authJwt } = require("../middlewares/auth");
-
+const CryptoJS = require("crypto-js");
 function sortObject(obj) {
   var sorted = {};
   var str = [];
@@ -166,9 +165,9 @@ router.post("/orderVnpay", async (req, res, next) => {
     vnp_Params = sortObject(vnp_Params);
 
     let signData = querystring.stringify(vnp_Params, { encode: false });
-    let hmac = crypto.createHmac("sha512", secretKey);
-    let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
-    vnp_Params["vnp_SecureHash"] = signed;
+    let hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, secretKey);
+    let hash = hmac.update(signData).finalize().toString(CryptoJS.enc.Hex);
+    vnp_Params["vnp_SecureHash"] = hash;
     vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
     res.status(200).json(vnpUrl);
   } catch (err) {
@@ -184,8 +183,8 @@ router.get("/vnpay_return", async (req, res) => {
     vnp_Params = sortObject(vnp_Params);
     let secretKey = process.env.vnp_HashSecret;
     let signData = querystring.stringify(vnp_Params, { encode: false });
-    let hmac = crypto.createHmac("sha512", secretKey);
-    let signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
+    let hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, secretKey);
+    let signed = hmac.update(signData).finalize().toString(CryptoJS.enc.Hex);
     if (secureHash === signed) {
       let orderId = vnp_Params["vnp_TxnRef"];
       let rspCode = vnp_Params["vnp_ResponseCode"];
@@ -193,7 +192,9 @@ router.get("/vnpay_return", async (req, res) => {
       const order = await Order.findByIdAndUpdate(orderId, {
         Payment_Status: "completed",
       });
-      res.status(200).redirect("http://localhost:3100/order-success?order_id="+orderId);
+      res
+        .status(200)
+        .redirect("http://localhost:3100/order-success?order_id=" + orderId);
 
       //Kiem tra du lieu co hop le khong, cap nhat trang thai don hang va gui ket qua cho VNPAY theo dinh dang duoi
       // res.status(200).json({ RspCode: "00", Message: "success" });
