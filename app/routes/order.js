@@ -75,7 +75,7 @@ router.get("/getOrdersByCustomer", authJwt.verifyToken, async (req, res) => {
   try {
     const orders = await Order.find({
       Id_Customer: req.userId,
-    });
+    }).sort({ createdAt: -1 });
     res.status(200).json(orders);
   } catch (err) {
     res.status(400).json(err);
