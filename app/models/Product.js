@@ -14,6 +14,7 @@ const ProductSchema = new mongoose.Schema(
     Rating: { type: Number, default: 0 },
     Details: { type: String },
     Discount: { type: Number, default: 0 },
+    Is_Hot: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
