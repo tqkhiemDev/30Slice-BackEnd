@@ -177,18 +177,12 @@ router.post("/orderVnpay", async (req, res, next) => {
 });
 router.get("/vnpay_return", async (req, res, next) => {
   var vnp_Params = req.query;
-
   var secureHash = vnp_Params["vnp_SecureHash"];
-
   delete vnp_Params["vnp_SecureHash"];
   delete vnp_Params["vnp_SecureHashType"];
-
   vnp_Params = sortObject(vnp_Params);
-
-  var config = require("config");
-  var tmnCode = config.get("vnp_TmnCode");
-  var secretKey = config.get("vnp_HashSecret");
-
+  var tmnCode = process.env.vnp_TmnCode;
+  var secretKey = process.env.vnp_HashSecret;
   var signData = querystring.stringify(vnp_Params, { encode: false });
 
   var hmac = crypto.createHmac("sha512", secretKey);
