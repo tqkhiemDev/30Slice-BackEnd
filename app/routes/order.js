@@ -50,14 +50,13 @@ router.get("/getOneOrder/:id", async (req, res) => {
       {
         $unwind: {
           path: "$Info",
-        }
-        
+        },
       },
       {
         $project: {
-          IsCustomer_Delete : 0,
-          IsAdmin_Delete : 0,
-          __v : 0,
+          IsCustomer_Delete: 0,
+          IsAdmin_Delete: 0,
+          __v: 0,
           "Info.Password": 0,
           "Info.__v": 0,
           "Info.createdAt": 0,
@@ -72,7 +71,7 @@ router.get("/getOneOrder/:id", async (req, res) => {
 });
 
 //get by customer
-router.get("/getOrdersByCustomer",authJwt.verifyToken, async (req, res) => {
+router.get("/getOrdersByCustomer", authJwt.verifyToken, async (req, res) => {
   try {
     const orders = await Order.find({
       Id_Customer: req.userId,
@@ -130,47 +129,51 @@ router.put("CancelOrderByUser", async (req, res) => {
   }
 });
 
-router.post("/create_payment_url", function (req, res, next) {
-  var ipAddr =
-    req.headers["x-forwarded-for"] ||
-    req.connection.remoteAddress ||
-    req.socket.remoteAddress ||
-    req.connection.socket.remoteAddress;
-  console.log(ipAddr);
+router.post("/orderVnpay", async (req, res, next) => {
+  const newOrder = new Order(req.body);
+  try {
+    const savedOrder = await newOrder.save();
+    var ipAddr =
+      req.headers["x-forwarded-for"] ||
+      req.connection.remoteAddress ||
+      req.socket.remoteAddress ||
+      req.connection.socket.remoteAddress;
+    // console.log(ipAddr);
 
-  var tmnCode = process.env.vnp_TmnCode;
-  var secretKey = process.env.vnp_HashSecret;
-  var vnpUrl = process.env.vnp_Url;
-  var returnUrl = process.env.vnp_ReturnUrl;
-  var date = new Date();
+    var tmnCode = process.env.vnp_TmnCode;
+    var secretKey = process.env.vnp_HashSecret;
+    var vnpUrl = process.env.vnp_Url;
+    var returnUrl = process.env.vnp_ReturnUrl;
+    var date = new Date();
 
-  var createDate = dateFormat(date, "yyyymmddHHmmss");
-  var orderId = req.body.orderId;
+    var createDate = dateFormat(date, "yyyymmddHHmmss");
+    var orderId = savedOrder._id;
 
-  var vnp_Params = {};
-  vnp_Params["vnp_Version"] = "2.1.0";
-  vnp_Params["vnp_Command"] = "pay";
-  vnp_Params["vnp_TmnCode"] = tmnCode;
-  vnp_Params["vnp_Locale"] = "vn";
-  vnp_Params["vnp_CurrCode"] = "VND";
-  vnp_Params["vnp_TxnRef"] = orderId;
-  vnp_Params["vnp_OrderInfo"] = "Thanh toán đơn hàng 30Slice " + orderId;
-  vnp_Params["vnp_OrderType"] = "billpayment";
-  vnp_Params["vnp_Amount"] = req.body.amount * 100;
-  vnp_Params["vnp_ReturnUrl"] = returnUrl;
-  vnp_Params["vnp_IpAddr"] = ipAddr;
-  vnp_Params["vnp_CreateDate"] = createDate;
+    var vnp_Params = {};
+    vnp_Params["vnp_Version"] = "2.1.0";
+    vnp_Params["vnp_Command"] = "pay";
+    vnp_Params["vnp_TmnCode"] = tmnCode;
+    vnp_Params["vnp_Locale"] = "vn";
+    vnp_Params["vnp_CurrCode"] = "VND";
+    vnp_Params["vnp_TxnRef"] = orderId;
+    vnp_Params["vnp_OrderInfo"] = "Thanh toán đơn hàng 30Slice " + orderId;
+    vnp_Params["vnp_OrderType"] = "billpayment";
+    vnp_Params["vnp_Amount"] = savedOrder.Amount * 100;
+    vnp_Params["vnp_ReturnUrl"] = returnUrl;
+    vnp_Params["vnp_IpAddr"] = ipAddr;
+    vnp_Params["vnp_CreateDate"] = createDate;
 
-  vnp_Params = sortObject(vnp_Params);
+    vnp_Params = sortObject(vnp_Params);
 
-  var signData = querystring.stringify(vnp_Params, { encode: false });
-  var hmac = crypto.createHmac("sha512", secretKey);
-  var signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
-  vnp_Params["vnp_SecureHash"] = signed;
-  vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
-
-  res.status(200).json(vnpUrl);
+    var signData = querystring.stringify(vnp_Params, { encode: false });
+    var hmac = crypto.createHmac("sha512", secretKey);
+    var signed = hmac.update(new Buffer(signData, "utf-8")).digest("hex");
+    vnp_Params["vnp_SecureHash"] = signed;
+    vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
+    res.status(200).json(vnpUrl);
+  } catch (err) {
+    res.status(400).json(err);
+  }
 });
-
 
 module.exports = router;
