@@ -6,41 +6,45 @@ const { authJwt } = require("../middlewares/auth");
 const bcrypt = require("bcrypt");
 
 // join stylelist data with login data using lookup
-router.get("/gettAllStyleList",[authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
-  try {
-    const data = await Login.aggregate([
-      {
-        $lookup: {
-          from: "style_lists",
-          localField: "_id",
-          foreignField: "Id_User",
-          as: "Info",
+router.get(
+  "/gettAllStyleList",
+  [authJwt.verifyToken, authJwt.isAdmin],
+  async (req, res) => {
+    try {
+      const data = await Login.aggregate([
+        {
+          $lookup: {
+            from: "style_lists",
+            localField: "_id",
+            foreignField: "Id_User",
+            as: "Info",
+          },
         },
-      },
-      {
-        $match: {
-          Role: "styleList",
+        {
+          $match: {
+            Role: "styleList",
+          },
         },
-      },
-      {
-        $unwind: "$Info",
-      },
-      {
-        $project: {
-          Password: 0,
-          __v: 0,
-          "Info.__v": 0,
-          "Info.Id_User": 0,
-          "Info.createdAt": 0,
-          "Info.updatedAt": 0,
+        {
+          $unwind: "$Info",
         },
-      },
-    ]);
-    res.status(200).json(data);
-  } catch (err) {
-    res.status(400).json(err);
+        {
+          $project: {
+            Password: 0,
+            __v: 0,
+            "Info.__v": 0,
+            "Info.Id_User": 0,
+            "Info.createdAt": 0,
+            "Info.updatedAt": 0,
+          },
+        },
+      ]);
+      res.status(200).json(data);
+    } catch (err) {
+      res.status(400).json(err);
+    }
   }
-});
+);
 
 // add new shift to shift array in stylelist not duplicate shift
 router.post(
@@ -60,6 +64,20 @@ router.post(
         { new: true }
       );
       res.status(200).json(data);
+    } catch (err) {
+      res.status(400).json(err);
+    }
+  }
+);
+// delete stylelist
+router.delete(
+  "/deleteStyleList/:id",
+  [authJwt.verifyToken, authJwt.isAdmin],
+  async (req, res) => {
+    try {
+      await Login.findByIdAndDelete(req.params.id);
+      await StyleList.findAndDelete({ Id_User: req.params.id });
+      res.status(200).json({ message: "Đã xoá thành công" });
     } catch (err) {
       res.status(400).json(err);
     }
@@ -157,7 +175,5 @@ router.post("/", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
     res.status(400).json(err);
   }
 });
-
-
 
 module.exports = router;
