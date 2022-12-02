@@ -180,5 +180,16 @@ router.post("/reset-password", authJwt.verifyToken, async (req, res) => {
     res.status(500).json(err);
   }
 });
+// get all user role admin and writer
+router.get("/getAdmin", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
+  try {
+    const users = await Login.find({
+      Role: { $in: ["admin", "writer"] },
+    }).select("-Password");
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 module.exports = router;
