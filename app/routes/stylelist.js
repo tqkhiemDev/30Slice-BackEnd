@@ -76,7 +76,7 @@ router.delete(
   async (req, res) => {
     try {
       await Login.findByIdAndDelete(req.params.id);
-      await StyleList.findAndDelete({ Id_User: req.params.id });
+      await StyleList.findOneAndDelete({ Id_User: req.params.id });
       res.status(200).json({ message: "Đã xoá thành công" });
     } catch (err) {
       res.status(400).json(err);
