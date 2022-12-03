@@ -87,5 +87,90 @@ router.get("/getHistoryBooking", authJwt.verifyToken, async (req, res) => {
     res.status(400).json(err);
   }
 });
+// get booking by id
+router.get("/getBookingById/:id", async (req, res) => {
+  try {
+    const data = await Booking.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(req.params.id),
+        },
+      },
+      {
+        $lookup: {
+          from: "services",
+          localField: "Id_Service",
+          foreignField: "_id",
+          as: "Service",
+        },
+      },
+      {
+        $unwind: {
+          path: "$Service",
+        },
+      },
+      {
+        $lookup: {
+          from: "logins",
+          localField: "Id_Style_List",
+          foreignField: "_id",
+          as: "StyleList",
+        },
+      },
+      {
+        $unwind: {
+          path: "$StyleList",
+        },
+      },
+      {
+        $lookup: {
+          from: "logins",
+          localField: "Id_Customer",
+          foreignField: "_id",
+          as: "Customer",
+        },
+      },
+      {
+        $unwind: {
+          path: "$Customer",
+        },
+      },
+      {
+        $project: {
+          __v: 0,
+          Id_Service: 0,
+          Id_Style_List: 0,
+          Id_Customer: 0,
+          "Service.__v": 0,
+          "Service._id": 0,
+          "Service.createdAt": 0,
+          "Service.updatedAt": 0,
+          "Service.Images": 0,
+          "Service.Describe": 0,
+          "StyleList.Password": 0,
+          "StyleList.__v": 0,
+          "StyleList._id": 0,
+          "StyleList.Role": 0,
+          "StyleList.Email": 0,
+          "StyleList.Phone": 0,
+          "StyleList.Username": 0,
+          "StyleList.createdAt": 0,
+          "StyleList.updatedAt": 0,
+          "Customer.Password": 0,
+          "Customer.__v": 0,
+          "Customer._id": 0,
+          "Customer.Role": 0,
+          "Customer.Email": 0,
+          "Customer.Username": 0,
+          "Customer.createdAt": 0,
+          "Customer.updatedAt": 0,
+        },
+      },
+    ]);
+    res.status(200).json(data[0]);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
 
 module.exports = router;
