@@ -62,7 +62,8 @@ router.get('/getProductsByCategory/:id', async (req, res) => {
     const products = await Product.find({
       Id_Categories: Id_Categories,
       Is_Show: true,
-    }).sort({ createdAt: -1 });
+    }).sort({ createdAt: -1 }).populate('Id_Categories', 'Name');
+
     res.status(200).json(products);
   } catch (err) {
     res.status(400).json(err);

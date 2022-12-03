@@ -216,3 +216,11 @@
 20221201	14:24:01	159091aa-c7db-4659-9728-22eb34631ae1	GET	/api/order/getOneOrder/637c6fc52beb589c40c9ea94	undefined
 20221201	14:25:05	db7d3b23-2897-4864-b79e-f511b4d6c3c7	GET	/api/order/getOneOrder/637c6fc52beb589c40c9ea94	undefined
 20221201	14:27:08	74995097-a972-4ec5-b4b9-4396f144627d	GET	/api/order/getOneOrder/63884e861b6e45aec1e17c0c	undefined
+20221203	21:11:45	32cac24d-53ac-4009-8eb6-d1d8158b7dd6	GET	/api/product/getOneProduct/635811eb8bf9b1ab50c4ca44	undefined
+20221203	21:29:15	306dc4fb-afb9-4341-b582-d427fbf4d44a	GET	/api/category/getCategories	undefined
+20221203	21:29:30	4abd8e1d-6548-4a05-b926-1798bc375996	GET	/api/getOneCategory/:id	undefined
+20221203	21:29:39	5e48da56-6eef-45cf-b73c-db4224ce539f	GET	/api/getOneCategory/634ec489fa4ebad7d3d74ac4	undefined
+20221203	21:29:47	6f25dcc6-f521-42d6-a039-80a8679d5d0b	GET	/api/getOneCategory/634ec489fa4ebad7d3d74ac4	undefined
+20221203	21:30:50	807aef63-ccf7-4b8a-a268-18e5474c41dd	GET	/api/product/getProductsByCategory/getProductsByCategory	undefined
+20221203	21:30:57	e126dfd0-7d30-4667-bced-f68370a55d74	GET	/api/product/getProductsByCategory/634ec494fa4ebad7d3d74ac6	undefined
+20221203	21:31:57	5d75d882-d747-44ff-a6e6-b4574f5fd828	GET	/api/product/getProductsByCategory/634ec494fa4ebad7d3d74ac6	undefined
