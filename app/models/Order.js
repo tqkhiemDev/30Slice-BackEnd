@@ -32,7 +32,7 @@ const OrderSchema = new mongoose.Schema(
     Amount: { type: Number, required: true },
     Payment_Method: { type: String, default: "COD", required: true },
     Payment_Status: { type: String, default: "Pending" },
-    Admin_Note: { type: String },
+    Admin_Note: { type: String, default: "" },
     Customer_Note: { type: String },
     IsCustomer_Delete: { type: Boolean, default: false },
     IsAdmin_Delete: { type: Boolean, default: false },
