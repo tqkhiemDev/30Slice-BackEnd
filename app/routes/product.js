@@ -78,7 +78,6 @@ router.get('/getOneProduct/:id', async (req, res) => {
       'Id_Categories',
       'Name'
     );
-    console.log(products);
     const updatedProduct = await Product.findOneAndUpdate(
       { _id: Id_Product },
       { Views: products.Views + 1 }
@@ -121,5 +120,16 @@ router.get('/getProducts', async (req, res) => {
     res.status(400).json(err);
   }
 });
+
+router.delete('/',async (req,res) => {
+  try {
+    await Product.findByIdAndDelete(
+      { _id: req.body._id }
+    );
+    res.status(200).json('delete success!!');
+  } catch (err) {
+    res.status(400).json(err);
+  }
+})
 
 module.exports = router;
