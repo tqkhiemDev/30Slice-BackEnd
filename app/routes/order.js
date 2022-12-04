@@ -30,7 +30,7 @@ router.get("/getAllOrders", async (req, res) => {
   }
 });
 
-router.get("/getOneOrder/:id", async (req, res) => {
+router.get("/getOneOrder/:id",authJwt.verifyToken, async (req, res) => {
   try {
     const order = await Order.aggregate([
       {
