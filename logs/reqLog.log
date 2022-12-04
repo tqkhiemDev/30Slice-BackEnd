@@ -224,3 +224,4 @@
 20221203	21:30:50	807aef63-ccf7-4b8a-a268-18e5474c41dd	GET	/api/product/getProductsByCategory/getProductsByCategory	undefined
 20221203	21:30:57	e126dfd0-7d30-4667-bced-f68370a55d74	GET	/api/product/getProductsByCategory/634ec494fa4ebad7d3d74ac6	undefined
 20221203	21:31:57	5d75d882-d747-44ff-a6e6-b4574f5fd828	GET	/api/product/getProductsByCategory/634ec494fa4ebad7d3d74ac6	undefined
+20221204	14:05:18	1eb90de1-ff97-4b3a-8560-0b3788823d94	GET	/api/product/getAllProducts	undefined
