@@ -191,5 +191,19 @@ router.get(
     }
   }
 );
+router.put("/updateBooking/:id", async (req, res) => {
+  try {
+     await Booking.findByIdAndUpdate(req.params.id,
+      {
+        $set: Status = req.body.Status,
+      },
+      { new: true }
+    );
+    res.status(200).json({ message: "Đã hoàn thành đơn đặt" });
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
 
 module.exports = router;
