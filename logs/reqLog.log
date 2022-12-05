@@ -241,3 +241,12 @@
 20221205	10:43:06	a3b438bd-c7eb-4a97-93c0-c053b30a0cb9	POST	/api/auth/signin	undefined
 20221205	10:43:25	a8a5bd6f-fb6b-4852-b771-3308bcc27182	GET	/api/product/getAllProducts?page=1&limit=12&search=n	undefined
 20221205	10:43:34	3048c7a6-33a9-4481-90c3-c3f56df0dbcb	GET	/api/product/getAllProducts?page=1&limit=12&search=	undefined
+20221205	10:47:02	ced9b4b4-a294-4674-8493-a1c7ee29d9ec	GET	/api/product/getAllProductsByPage?page=1&limit=12&search=	undefined
+20221205	10:49:01	f92337ce-c561-4a65-aad9-9d0b7b8e7136	GET	/api/admin/info	undefined
+20221205	10:49:18	3b4a9d2c-156f-4232-afab-8fab5429c9a7	POST	/api/user/signup	undefined
+20221205	10:49:22	c2eb84ec-ce28-4493-b5df-841990f5423f	POST	/api/user/signup	undefined
+20221205	10:49:56	42f04a79-3e1a-49a2-95f2-018d9b9e776d	POST	/api/admin/change-password-by-admin	undefined
+20221205	10:50:05	cfa6173b-d908-4c6a-b717-a58d4bbb7fa0	PUT	/api/admin/change-password	undefined
+20221205	10:50:13	a99575ec-e1c7-4da5-a331-0f39f0aeabc4	PUT	/api/admin/change-password	undefined
+20221205	10:50:58	a5d3021f-33d2-44d0-8768-cee3b05a0195	GET	/api/booking/getBookingById/638b0a4121f3a03c2d7a814c	undefined
+20221205	15:02:55	3a7e3855-a57a-4ad5-aca2-4f76804e25ae	GET	/api/order/getAllOrders	undefined
