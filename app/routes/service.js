@@ -1,5 +1,6 @@
 const Service = require('../models/Service');
-const { verifyTokenAndAdmin } = require('../middlewares/verifyToken');
+const { authJwt } = require("../middlewares/auth");
+
 const router = require('express').Router();
 
 //get all service
@@ -12,7 +13,7 @@ router.get('/getAllServices', async (req, res) => {
   }
 });
 // add new service
-router.post('/addService',verifyTokenAndAdmin, async (req, res) => {
+router.post('/addService',[authJwt.verifyToken,authJwt.isAdmin], async (req, res) => {
   const newService = new Service(req.body);
   try {
     const savedService = await newService.save();
@@ -22,7 +23,7 @@ router.post('/addService',verifyTokenAndAdmin, async (req, res) => {
   }
 });
 // delete service
-router.delete('/deleteService/',verifyTokenAndAdmin, async (req, res) => {
+router.delete('/deleteService',[authJwt.verifyToken,authJwt.isAdmin], async (req, res) => {
   try {
     const deletedService = await Service.findByIdAndDelete(req.body._id);
     res
@@ -33,7 +34,7 @@ router.delete('/deleteService/',verifyTokenAndAdmin, async (req, res) => {
   }
 });
 // update service
-router.put('/updateService/',verifyTokenAndAdmin, async (req, res) => {
+router.put('/updateService',[authJwt.verifyToken,authJwt.isAdmin], async (req, res) => {
   try {
     const updatedService = await Service.findByIdAndUpdate(
       req.req.body._id,
