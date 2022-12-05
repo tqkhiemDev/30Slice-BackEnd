@@ -172,5 +172,16 @@ router.get("/getBookingById/:id", async (req, res) => {
     res.status(400).json(err);
   }
 });
+// get booking by style list
+router.get("/getBookingByStyleList",authJwt.verifyToken, async (req, res) => {
+  try {
+    const data = await Booking.find({ Id_Style_List: req.userId }).populate("Id_Service","Name").populate("Id_Customer",{Full_Name:1,Phone:1}).sort({ BookedDate: -1 });
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
+
 
 module.exports = router;
