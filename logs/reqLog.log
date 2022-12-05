@@ -273,3 +273,5 @@
 20221205	18:31:45	68167cd9-1734-4973-9e63-ac5891fd2cd0	GET	/api/user/getAllCustomer	undefined
 20221205	18:32:02	dcb332f8-e25d-4ed5-b753-9aea4f2f7fca	GET	/api/user/getAllCustomer	undefined
 20221205	18:32:33	12e8a5d6-dc59-405c-94cc-16c8b2e3ee9b	GET	/api/user/getAllCustomer	undefined
+20221205	18:45:05	51b07403-c3c9-4b3d-84f0-08c4808c73b6	POST	/api/order	undefined
+20221205	19:00:28	f96f3a0e-878d-4837-84d4-bc8bd92fbb7b	POST	/api/order/orderVnpay	undefined
