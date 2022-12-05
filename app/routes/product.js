@@ -46,14 +46,14 @@ router.put(
 );
 
 //show
-// router.get('/getAllProducts', async (req, res) => {
-//   try {
-//     const products = await Product.find().sort({ createdAt: -1 }).populate("Id_Categories","Name");
-//     res.status(200).json(products);
-//   } catch (err) {
-//     res.status(400).json(err);
-//   }
-// });
+router.get('/getAllProducts',[authJwt.verifyToken,authJwt.isAdmin], async (req, res) => {
+  try {
+    const products = await Product.find().sort({ createdAt: -1 }).populate("Id_Categories","Name");
+    res.status(200).json(products);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
 
 //show by category
 router.get("/getProductsByCategory/:id", async (req, res) => {
@@ -123,7 +123,7 @@ router.get("/getProducts", async (req, res) => {
   }
 });
 // get product by page and limit and return total page by admin
-router.get("/getAllProducts",[authJwt.verifyToken,authJwt.isAdmin], async (req, res) => {
+router.get("/getAllProductsByPage",[authJwt.verifyToken,authJwt.isAdmin], async (req, res) => {
   const page = req.query.page;
   const limit = req.query.limit;
   const name = decodeURI(req.query.search);
