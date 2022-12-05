@@ -105,7 +105,7 @@ router.post("/", async (req, res) => {
 });
 
 //customer hidden
-router.put("DeleteOrderByUser", async (req, res) => {
+router.put("/DeleteOrderByUser", async (req, res) => {
   try {
     await Order.findOneAndUpdate(
       { _id: req.body._id },
@@ -118,7 +118,7 @@ router.put("DeleteOrderByUser", async (req, res) => {
 });
 
 //admin hidden
-router.put("DeleteOrderByAdmin", async (req, res) => {
+router.put("/DeleteOrderByAdmin", async (req, res) => {
   try {
     await Order.findOneAndUpdate(
       { _id: req.body._id },
@@ -131,7 +131,7 @@ router.put("DeleteOrderByAdmin", async (req, res) => {
 });
 
 //cancel order
-router.put("CancelOrderByUser", async (req, res) => {
+router.put("/CancelOrderByUser", async (req, res) => {
   try {
     await Order.findOneAndUpdate({ _id: req.body._id }, { Status: "huy" });
     res.status(200).json("Update thành công");
