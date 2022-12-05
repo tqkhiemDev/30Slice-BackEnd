@@ -174,13 +174,13 @@ router.get("/getBookingById/:id", async (req, res) => {
 });
 // get booking by style list
 router.get(
-  "/getBookingByStyleList/:date",
+  "/getBookingByStyleList",
   authJwt.verifyToken,
   async (req, res) => {
     try {
       const data = await Booking.find({
         Id_Style_List: req.userId,
-        BookedDate: req.params.date,
+        BookedDate: req.query.date,
       })
         .populate("Id_Service", "Name")
         .populate("Id_Customer", { Full_Name: 1, Phone: 1 })
