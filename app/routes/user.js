@@ -43,6 +43,47 @@ router.post("/register", async (req, res) => {
     res.status(500).json(err);
   }
 });
+// get all customer
+router.get("/getAllCustomer", async (req, res) => {
+  try {
+    const users =  await Customer.aggregate([
+      {
+        $match: {
+          isSignUp: true,
+        },
+      },
+      {
+        $lookup: {
+          from: "logins",
+          localField: "Id_User",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      {
+        $unwind: "$user",
+      },
+      {
+        $project: {
+          _id: 0,
+          History: 0,
+          Style_List_Favorite:0,
+          Schedule:0,
+          __v : 0,
+          "user._id": 0,
+          "user.Password": 0,
+          "user.__v": 0,
+          "user.createdAt": 0,
+          "user.updatedAt": 0,
+        },
+      },
+    ]);
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 // customer sign up
 router.post("/signup", async (req, res) => {
   try {
@@ -140,7 +181,7 @@ router.put("/change-password", authJwt.verifyToken, async (req, res) => {
     res.status(500).json(err);
   }
 });
-// change info 
+// change info
 router.put("/change-info", authJwt.verifyToken, async (req, res) => {
   try {
     const user = await Login.findOne({ _id: req.userId });
@@ -157,7 +198,6 @@ router.put("/change-info", authJwt.verifyToken, async (req, res) => {
     res.status(500).json(err);
   }
 });
-
 
 // // user sign up
 // router.post("/signup", async (req, res) => {

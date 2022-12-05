@@ -265,3 +265,11 @@
 20221205	15:23:54	9cbdc9c3-e04b-46be-b638-3a7be1185afa	GET	/api/order/getAllOrders	undefined
 20221205	15:24:32	418580bc-87b2-4828-ab5b-a7741c1d155f	GET	/api/order/getAllOrders	undefined
 20221205	15:24:58	1bb00bfd-9f18-4c48-b193-69cbbef54d01	GET	/api/order/getAllOrders	undefined
+20221205	18:27:28	46b02f65-498d-4199-b995-3dc3c5a06694	GET	/api/user/getAllCustomer	undefined
+20221205	18:29:07	dd3a825e-dc86-4bc0-8e39-57a27d1221fa	GET	/api/user/getAllCustomer	undefined
+20221205	18:29:44	f9cabd86-cd0b-4656-a035-ad57f15ac3b9	GET	/api/user/getAllCustomer	undefined
+20221205	18:30:36	180c92a7-2612-44a5-8caa-c6409ce53657	GET	/api/user/getAllCustomer	undefined
+20221205	18:31:03	b344fc06-591a-4673-a54c-3e52faa9ee9d	GET	/api/user/getAllCustomer	undefined
+20221205	18:31:45	68167cd9-1734-4973-9e63-ac5891fd2cd0	GET	/api/user/getAllCustomer	undefined
+20221205	18:32:02	dcb332f8-e25d-4ed5-b753-9aea4f2f7fca	GET	/api/user/getAllCustomer	undefined
+20221205	18:32:33	12e8a5d6-dc59-405c-94cc-16c8b2e3ee9b	GET	/api/user/getAllCustomer	undefined
