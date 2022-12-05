@@ -195,7 +195,10 @@ router.put("/updateBooking", async (req, res) => {
   try {
      await Booking.findByIdAndUpdate(req.body.id,
       {
-        $set: Status = req.body.Status,
+        $set: {
+          Status: req.body.status,
+
+        },
       },
       { new: true }
     );
