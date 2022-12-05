@@ -44,7 +44,7 @@ router.post("/register", async (req, res) => {
   }
 });
 // get all customer
-router.get("/getAllCustomer", async (req, res) => {
+router.get("/getAllCustomer",[authJwt.verifyToken,authJwt.isAdmin], async (req, res) => {
   try {
     const users =  await Customer.aggregate([
       {
