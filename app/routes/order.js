@@ -30,7 +30,7 @@ router.get("/getAllOrders", async (req, res) => {
   }
 });
 
-router.get("/getOneOrder/:id",authJwt.verifyToken, async (req, res) => {
+router.get("/getOneOrder/:id", authJwt.verifyToken, async (req, res) => {
   try {
     const order = await Order.aggregate([
       {
@@ -64,6 +64,18 @@ router.get("/getOneOrder/:id",authJwt.verifyToken, async (req, res) => {
       },
     ]);
     res.status(200).json(order[0]);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
+//note
+router.put("/noteByAdmin", authJwt.verifyToken, async (req, res) => {
+  try {
+    await Order.findByIdAndUpdate(req.body._id, {
+      Admin_Note: req.body.Admin_Note,
+    });
+    res.status(200).json("update ss");
   } catch (err) {
     res.status(400).json(err);
   }
