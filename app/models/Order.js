@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const OrderSchema = new mongoose.Schema(
   {
-    Id_Customer: { type: mongoose.Schema.Types.ObjectId, ref: "logins" },
+    Id_Customer: { type: mongoose.Schema.Types.ObjectId, ref: "login" },
     Products: [
       {
         _id: {
