@@ -191,9 +191,9 @@ router.get(
     }
   }
 );
-router.put("/updateBooking/:id", async (req, res) => {
+router.put("/updateBooking", async (req, res) => {
   try {
-     await Booking.findByIdAndUpdate(req.params.id,
+     await Booking.findByIdAndUpdate(req.body.id,
       {
         $set: Status = req.body.Status,
       },
