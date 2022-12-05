@@ -23,7 +23,7 @@ function sortObject(obj) {
 //get all
 router.get("/getAllOrders", async (req, res) => {
   try {
-    const orders = await Order.find().populate("Id_User", "Name").sort({ createdAt: -1 });
+    const orders = await Order.find().populate("Id_Customer", "Full_Name").sort({ createdAt: -1 });
     res.status(200).json(orders);
   } catch (err) {
     res.status(400).json(err);
