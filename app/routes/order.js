@@ -5,6 +5,8 @@ const dateFormat = require("dateformat");
 const mongoose = require("mongoose");
 const { authJwt } = require("../middlewares/auth");
 const CryptoJS = require("crypto-js");
+const https = require("https");
+
 function sortObject(obj) {
   var sorted = {};
   var str = [];
@@ -149,7 +151,7 @@ router.put("/CancelOrderByUser", async (req, res) => {
   }
 });
 
-router.post("/orderVnpay", async (req, res, next) => {
+router.post("/orderVnpay", async (req, res) => {
   const newOrder = new Order(req.body);
   try {
     const savedOrder = await newOrder.save();
@@ -227,16 +229,18 @@ router.get("/vnpay_return", async (req, res) => {
   }
 });
 router.get("/momoPay", async (req, res) => {
+  const newOrder = new Order(req.body);
   try {
+    const savedOrder = await newOrder.save();
     let partnerCode = "MOMO";
     let accessKey = "F8BBA842ECF85";
     let secretkey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
-    let requestId = partnerCode + new Date().getTime();
-    let orderId = requestId;
-    let orderInfo = "pay with MoMo";
+    let requestId = savedOrder._id;
+    let orderId = savedOrder._id;
+    let orderInfo = "Thanh toán đơn hàng 30Slice " + orderId;
     let redirectUrl = "https://momo.vn/return";
     let ipnUrl = (redirectUrl = "https://30slice.online/api/momoPay/return");
-    let amount = "50000";
+    let amount = savedOrder.Amount;
     let requestType = "captureWallet";
     let extraData = ""; //pass empty value if your merchant does not have stores
     //before sign HMAC SHA256 with format
@@ -282,7 +286,6 @@ router.get("/momoPay", async (req, res) => {
       lang: "en",
     });
     //Create the HTTPS objects
-    const https = require("https");
     const options = {
       hostname: "test-payment.momo.vn",
       port: 443,
@@ -303,7 +306,6 @@ router.get("/momoPay", async (req, res) => {
     // write data to request body
     request.write(requestBody);
   } catch (err) {
-    console.log(err);
     res.status(400).json(err);
   }
 });
