@@ -26,8 +26,8 @@ router.get("/getAllNews", async (req, res) => {
             createdAt: 0,
             updatedAt: 0,
             _id: 0,
-            Email : 0,
-            Phone : 0,
+            Email: 0,
+            Phone: 0,
           },
         },
       },
@@ -37,12 +37,38 @@ router.get("/getAllNews", async (req, res) => {
     res.status(400).json(err);
   }
 });
-
-//show by category
-router.get("/getNewsByCategory/:id", async (req, res) => {
-  const Id_Categories = req.params.id;
+router.get("/getAllNewsByUser", async (req, res) => {
   try {
-    const news = await News.find({ Id_Categories: Id_Categories });
+    const news = await News.aggregate([
+      {
+        $match: { Is_Show: true },
+      },
+      {
+        $lookup: {
+          from: "logins",
+          localField: "Create_By",
+          foreignField: "_id",
+          as: "Create_By",
+        },
+      },
+      {
+        $unwind: "$Create_By",
+      },
+      {
+        $project: {
+          __v: 0,
+          Create_By: {
+            __v: 0,
+            Password: 0,
+            createdAt: 0,
+            updatedAt: 0,
+            _id: 0,
+            Email: 0,
+            Phone: 0,
+          },
+        },
+      },
+    ]);
     res.status(200).json(news);
   } catch (err) {
     res.status(400).json(err);
