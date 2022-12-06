@@ -36,7 +36,7 @@ app.use("/api/product", productRoute);
 app.use("/api/news", newsRoute);
 app.use("/api/booking", bookingRoute);
 app.use("/api/combo", comboRoute);
-app.use("/api/combo", commentRoute);
+app.use("/api/comment", commentRoute);
 app.use("/api/admin/user-management", userMngt);
 
 // Refresh token
