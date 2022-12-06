@@ -464,3 +464,9 @@
 20221206	17:33:26	7e0ce006-9302-4cc2-91bd-64bc440dbf65	POST	/api/order/momoPay	undefined
 20221206	17:34:16	0076cecc-e331-42e3-8114-855bc1b6d4e4	POST	/api/order/momoPay	undefined
 20221206	17:34:26	1e56b7b8-5465-4504-8451-7a23b71bc953	POST	/api/order/momoPay	undefined
+20221206	20:02:11	7af9d458-cef6-4428-91d8-5ca3e3f40f09	GET	/api/combos/getCombos	undefined
+20221206	20:02:16	a94154fa-a9bd-4248-be2d-2e90d969d194	GET	/api/combo/getCombos	undefined
+20221206	20:02:33	659d7bbb-e376-4aef-b61f-2fcc8550f157	GET	/api/combo/getCombos	undefined
+20221206	20:04:01	c2c3136c-24c4-4b91-bd64-9d03e9d6a4ce	GET	/api/combo/getCombos	undefined
+20221206	20:05:54	34f01d21-4fb4-4729-893a-368cd2f82de8	GET	/api/combo/getCombos	undefined
+20221206	20:06:19	b40a621a-2f52-40ec-9be9-7dcd8252b2cc	GET	/api/combo/getCombos	undefined

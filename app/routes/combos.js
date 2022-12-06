@@ -32,6 +32,35 @@ router.get('/getOneCombos', async (req,res) => {
     res.status(400).json(err);
   }
 })
+// get combos for user
+router.get('/getCombos', async (req, res) => {
+  try {
+    const data = await Combos.aggregate([
+      {
+        $match: {
+          Is_Show: true,
+        },
+      },
+     {
+      $lookup: {
+        from: 'products',
+        localField: 'Arr_Id_Products',
+        foreignField: '_id',
+        as: 'Arr_Products',
+      },
+    },
+    {
+      $project: {
+        Arr_Id_Products: 0,
+      },
+    },
+  ]).sort({ Ordinal: 1 });
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
 
 //update
 router.put("/", async (req, res) => {
