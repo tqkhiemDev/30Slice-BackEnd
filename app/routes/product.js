@@ -46,14 +46,20 @@ router.put(
 );
 
 //show
-router.get('/getAllProducts',[authJwt.verifyToken,authJwt.isAdmin], async (req, res) => {
-  try {
-    const products = await Product.find().sort({ createdAt: -1 }).populate("Id_Categories","Name");
-    res.status(200).json(products);
-  } catch (err) {
-    res.status(400).json(err);
+router.get(
+  "/getAllProducts",
+  [authJwt.verifyToken, authJwt.isAdmin],
+  async (req, res) => {
+    try {
+      const products = await Product.find()
+        .sort({ createdAt: -1 })
+        .populate("Id_Categories", "Name");
+      res.status(200).json(products);
+    } catch (err) {
+      res.status(400).json(err);
+    }
   }
-});
+);
 
 //show by category
 router.get("/getProductsByCategory/:id", async (req, res) => {
@@ -123,42 +129,59 @@ router.get("/getProducts", async (req, res) => {
   }
 });
 // get product by page and limit and return total page by admin
-router.get("/getAllProductsByPage",[authJwt.verifyToken,authJwt.isAdmin], async (req, res) => {
-  const page = req.query.page;
-  const limit = req.query.limit;
-  const name = decodeURI(req.query.search);
-  try {
-    if (name) {
-      const products = await Product.find({
-        Name: { $regex: name, $options: "i" },
-      })
-        .populate("Id_Categories", "Name")
-        .sort({ createdAt: -1 })
-        .skip((page - 1) * limit)
-        .limit(limit * 1);
-      const totalItem = await Product.countDocuments({
-        Name: { $regex: name, $options: "i" },
-      });
-      const totalPage = Math.ceil(totalItem / limit);
-      res.status(200).json({ totalItem, totalPage, products });
-    } else {
-      const totalItem = await Product.countDocuments();
-      const totalPage = Math.ceil(totalItem / limit);
-      const products = await Product.find()
-        .populate("Id_Categories", "Name")
-        .sort({ createdAt: -1 })
-        .skip((page - 1) * limit)
-        .limit(limit * 1);
-      res.status(200).json({ totalItem, totalPage, products });
+router.get(
+  "/getAllProductsByPage",
+  [authJwt.verifyToken, authJwt.isAdmin],
+  async (req, res) => {
+    const page = req.query.page;
+    const limit = req.query.limit;
+    const name = decodeURI(req.query.search);
+    try {
+      if (name) {
+        const products = await Product.find({
+          Name: { $regex: name, $options: "i" },
+        })
+          .populate("Id_Categories", "Name")
+          .sort({ createdAt: -1 })
+          .skip((page - 1) * limit)
+          .limit(limit * 1);
+        const totalItem = await Product.countDocuments({
+          Name: { $regex: name, $options: "i" },
+        });
+        const totalPage = Math.ceil(totalItem / limit);
+        res.status(200).json({ totalItem, totalPage, products });
+      } else {
+        const totalItem = await Product.countDocuments();
+        const totalPage = Math.ceil(totalItem / limit);
+        const products = await Product.find()
+          .populate("Id_Categories", "Name")
+          .sort({ createdAt: -1 })
+          .skip((page - 1) * limit)
+          .limit(limit * 1);
+        res.status(200).json({ totalItem, totalPage, products });
+      }
+    } catch (err) {
+      res.status(400).json(err);
     }
-  } catch (err) {
-    res.status(400).json(err);
   }
-});
+);
 router.delete("/", async (req, res) => {
   try {
     await Product.findByIdAndDelete({ _id: req.body._id });
     res.status(200).json("delete success!!");
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+router.get("/getProductsHome", async (req, res) => {
+  try {
+    const productsNew = await Product.find({ Is_Show: true })
+      .sort({ createdAt: -1 })
+      .limit(12);
+      const productHot = await Product.find({ Is_Show: true, Is_Hot: true })
+      .sort({ createdAt: -1 })
+      .limit(12);
+    res.status(200).json({productsNew, productHot});
   } catch (err) {
     res.status(400).json(err);
   }
