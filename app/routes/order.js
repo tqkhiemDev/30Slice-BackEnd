@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const { authJwt } = require("../middlewares/auth");
 const CryptoJS = require("crypto-js");
 const https = require("https");
+const axios = require("axios");
 
 function sortObject(obj) {
   var sorted = {};
@@ -239,7 +240,8 @@ router.post("/momoPay", async (req, res) => {
     let orderId = savedOrder._id;
     let orderInfo = "Thanh toán đơn hàng 30Slice " + orderId;
     let redirectUrl = "https://momo.vn/return";
-    let ipnUrl = (redirectUrl = "https://30slice.online/api/order/momoPay/return");
+    let ipnUrl = (redirectUrl =
+      "https://30slice.online/api/order/momoPay/return");
     let amount = savedOrder.Amount;
     let requestType = "captureWallet";
     let extraData = ""; //pass empty value if your merchant does not have stores
@@ -285,26 +287,18 @@ router.post("/momoPay", async (req, res) => {
       signature: signature,
       lang: "en",
     });
-    //Create the HTTPS objects
-    const options = {
-      hostname: "test-payment.momo.vn",
-      port: 443,
-      path: "/v2/gateway/api/create",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Content-Length": Buffer.byteLength(requestBody),
-      },
-    };
-    //Send the request and get the response
-    const request = https.request(options, (response) => {
-      response.setEncoding("utf8");
-      response.on("data", (body) => {
-        res.status(200).json(JSON.parse(body).payUrl);
-      });
-    });
-    // write data to request body
-    request.write(requestBody);
+
+    const response = await axios.post(
+      "https://test-payment.momo.vn/v2/gateway/api/create",
+      requestBody,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Content-Length": Buffer.byteLength(requestBody),
+        },
+      }
+    );
+    res.status(200).json(response.data.payUrl);
   } catch (err) {
     res.status(400).json(err);
   }
