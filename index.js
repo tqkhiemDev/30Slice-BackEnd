@@ -24,6 +24,7 @@ const newsRoute = require("./app/routes/news");
 const bookingRoute = require("./app/routes/booking");
 const comboRoute = require("./app/routes/combos");
 const userMngt = require("./app/routes/admin/userMngt.route");
+const commentRoute = require("./app/routes/comment");
 
 app.use("/api/order", orderRoute);
 app.use("/api/user", userRoute);
@@ -35,6 +36,7 @@ app.use("/api/product", productRoute);
 app.use("/api/news", newsRoute);
 app.use("/api/booking", bookingRoute);
 app.use("/api/combo", comboRoute);
+app.use("/api/combo", commentRoute);
 app.use("/api/admin/user-management", userMngt);
 
 // Refresh token
