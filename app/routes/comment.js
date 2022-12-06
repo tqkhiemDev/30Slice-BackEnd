@@ -12,8 +12,8 @@ router.get("/getAllComment", async (req, res) => {
   }
 });
 //show theo san pham
-router.get("/getCommentByProduct", async (req, res) => {
-  const id_product = req.body.Id_Product;
+router.get("/getCommentByProduct/:id", async (req, res) => {
+  const id_product = req.params.id;
   try {
     const comments = await Comment.find({ Id_Product: id_product });
 
