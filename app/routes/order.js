@@ -228,7 +228,7 @@ router.get("/vnpay_return", async (req, res) => {
     res.status(400).json(err);
   }
 });
-router.get("/momoPay", async (req, res) => {
+router.post("/momoPay", async (req, res) => {
   const newOrder = new Order(req.body);
   try {
     const savedOrder = await newOrder.save();
@@ -309,5 +309,23 @@ router.get("/momoPay", async (req, res) => {
     res.status(400).json(err);
   }
 });
-
+router.get("/momoPay/return", async (req, res) => {
+  try {
+    const orderId = req.query.orderId;
+    const resultCode = req.query.resultCode;
+    const message = req.query.message;
+    if (resultCode === "0" && message === "Successful.") {
+      await Order.findByIdAndUpdate(orderId, {
+        Payment_Status: "completed",
+      });
+      res
+        .status(200)
+        .redirect("https://30slice.com/order-success?order_id=" + orderId);
+    } else {
+      res.status(200).redirect("https://30slice.com/order-fail");
+    }
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
 module.exports = router;
