@@ -23,7 +23,15 @@ function sortObject(obj) {
 //get all
 router.get("/getAllOrders", async (req, res) => {
   try {
-    const orders = await Order.find().populate("Id_Customer",{_id:1,Name:1,Phone:1,Email:1,Full_Name:1}).sort({ createdAt : -1 });
+    const orders = await Order.find()
+      .populate("Id_Customer", {
+        _id: 1,
+        Name: 1,
+        Phone: 1,
+        Email: 1,
+        Full_Name: 1,
+      })
+      .sort({ createdAt: -1 });
     res.status(200).json(orders);
   } catch (err) {
     console.log(err);
@@ -215,6 +223,87 @@ router.get("/vnpay_return", async (req, res) => {
       res.status(200).json({ RspCode: "97", Message: "Fail checksum" });
     }
   } catch (err) {
+    res.status(400).json(err);
+  }
+});
+router.get("/momoPay", async (req, res) => {
+  try {
+    let partnerCode = "MOMO";
+    let accessKey = "F8BBA842ECF85";
+    let secretkey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
+    let requestId = partnerCode + new Date().getTime();
+    let orderId = requestId;
+    let orderInfo = "pay with MoMo";
+    let redirectUrl = "https://momo.vn/return";
+    let ipnUrl = (redirectUrl = "https://30slice.online/api/momoPay/return");
+    let amount = "50000";
+    let requestType = "captureWallet";
+    let extraData = ""; //pass empty value if your merchant does not have stores
+    //before sign HMAC SHA256 with format
+    let rawSignature =
+      "accessKey=" +
+      accessKey +
+      "&amount=" +
+      amount +
+      "&extraData=" +
+      extraData +
+      "&ipnUrl=" +
+      ipnUrl +
+      "&orderId=" +
+      orderId +
+      "&orderInfo=" +
+      orderInfo +
+      "&partnerCode=" +
+      partnerCode +
+      "&redirectUrl=" +
+      redirectUrl +
+      "&requestId=" +
+      requestId +
+      "&requestType=" +
+      requestType;
+    //signature
+    let signature = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, secretkey)
+      .update(rawSignature)
+      .finalize()
+      .toString(CryptoJS.enc.Hex);
+    //json object send to MoMo endpoint
+    const requestBody = JSON.stringify({
+      partnerCode: partnerCode,
+      accessKey: accessKey,
+      requestId: requestId,
+      amount: amount,
+      orderId: orderId,
+      orderInfo: orderInfo,
+      redirectUrl: redirectUrl,
+      ipnUrl: ipnUrl,
+      extraData: extraData,
+      requestType: requestType,
+      signature: signature,
+      lang: "en",
+    });
+    //Create the HTTPS objects
+    const https = require("https");
+    const options = {
+      hostname: "test-payment.momo.vn",
+      port: 443,
+      path: "/v2/gateway/api/create",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": Buffer.byteLength(requestBody),
+      },
+    };
+    //Send the request and get the response
+    const request = https.request(options, (response) => {
+      response.setEncoding("utf8");
+      response.on("data", (body) => {
+        res.status(200).json(JSON.parse(body).payUrl);
+      });
+    });
+    // write data to request body
+    request.write(requestBody);
+  } catch (err) {
+    console.log(err);
     res.status(400).json(err);
   }
 });
