@@ -177,10 +177,10 @@ router.get("/getProductsHome", async (req, res) => {
   try {
     const productsNew = await Product.find({ Is_Show: true })
       .sort({ createdAt: -1 })
-      .limit(6);
+      .limit(12);
       const productHot = await Product.find({ Is_Show: true, Is_Hot: true })
       .sort({ createdAt: -1 })
-      .limit(6);
+      .limit(12);
     res.status(200).json({productsNew, productHot});
   } catch (err) {
     res.status(400).json(err);
