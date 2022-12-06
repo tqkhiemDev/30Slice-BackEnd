@@ -239,7 +239,7 @@ router.post("/momoPay", async (req, res) => {
     let orderId = savedOrder._id;
     let orderInfo = "Thanh toán đơn hàng 30Slice " + orderId;
     let redirectUrl = "https://momo.vn/return";
-    let ipnUrl = (redirectUrl = "https://30slice.online/api/momoPay/return");
+    let ipnUrl = (redirectUrl = "https://30slice.online/api/order/momoPay/return");
     let amount = savedOrder.Amount;
     let requestType = "captureWallet";
     let extraData = ""; //pass empty value if your merchant does not have stores
