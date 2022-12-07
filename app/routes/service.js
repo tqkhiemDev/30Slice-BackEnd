@@ -37,7 +37,7 @@ router.delete('/deleteService',[authJwt.verifyToken,authJwt.isAdmin], async (req
 router.put('/updateService',[authJwt.verifyToken,authJwt.isAdmin], async (req, res) => {
   try {
     const updatedService = await Service.findByIdAndUpdate(
-      req.req.body._id,
+      req.body._id,
       { $set: req.body },
       { new: true }
     );
