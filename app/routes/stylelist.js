@@ -152,11 +152,9 @@ router.put("/", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
 // add stylelist
 router.post("/", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
   try {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.Password, salt);
     const login = new Login({
       Username: req.body.Username,
-      Password: hashedPassword,
+      Password: bcrypt.hashSync(req.body.Password, 8),
       Role: "styleList",
     });
     const data = await login.save();
@@ -175,5 +173,22 @@ router.post("/", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
     res.status(400).json(err);
   }
 });
+// changepassword stylelist by admin
+router.put(
+  "/changePasswordByAdmin",
+  [authJwt.verifyToken, authJwt.isAdmin],
+  async (req, res) => {
+    try {
+      const data = await Login.findByIdAndUpdate(
+        req.body._id,
+        { Password: bcrypt.hashSync(req.body.newPassword, 8) },
+        { new: true }
+      );
+      res.status(200).json(data);
+    } catch (err) {
+      res.status(400).json(err);
+    }
+  }
+);
 
 module.exports = router;
