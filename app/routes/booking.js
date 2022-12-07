@@ -173,29 +173,25 @@ router.get("/getBookingById/:id", async (req, res) => {
   }
 });
 // get booking by style list
-router.get(
-  "/getBookingByStyleList",
-  authJwt.verifyToken,
-  async (req, res) => {
-    try {
-      const data = await Booking.find({
-        Id_Style_List: req.userId,
-        BookedDate: req.query.date,
-      })
-        .populate("Id_Service", "Name")
-        .populate("Id_Customer", { Full_Name: 1, Phone: 1 })
-        .sort({ BookedDate: -1 });
-      res.status(200).json(data);
-    } catch (err) {
-      res.status(400).json(err);
-    }
+router.get("/getBookingByStyleList", authJwt.verifyToken, async (req, res) => {
+  try {
+    const data = await Booking.find({
+      Id_Style_List: req.userId,
+      BookedDate: req.query.date,
+    })
+      .populate("Id_Service", "Name")
+      .populate("Id_Customer", { Full_Name: 1, Phone: 1 })
+      .sort({ BookedDate: -1 });
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).json(err);
   }
-);
+});
 // update Status booking
 router.put("/updateBooking", async (req, res) => {
   try {
     const data = await Booking.updateOne(
-      { _id : req.body.id },
+      { _id: req.body.id },
       {
         $set: {
           Status: req.body.Status,
@@ -207,8 +203,21 @@ router.put("/updateBooking", async (req, res) => {
     res.status(400).json(err);
   }
 });
-
-
-
+// update service booking
+router.put("/updateServiceBooking", async (req, res) => {
+  try {
+    const data = await Booking.updateOne(
+      { _id: req.body._id },
+      {
+        $set: {
+          Id_Service: req.body.newService,
+        },
+      }
+    );
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
 
 module.exports = router;
