@@ -198,6 +198,20 @@ router.put("/change-info", authJwt.verifyToken, async (req, res) => {
     res.status(500).json(err);
   }
 });
+//  change avatar
+router.put("/change-avatar", authJwt.verifyToken, async (req, res) => {
+  try {
+    const user = await Login.findOne({ _id: req.userId });
+    if (user) {
+      // statement
+      user.Images = req.body.Images;
+      await user.save();
+      res.status(201).json({ message: "Đổi avatar thành công" });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
 // // user sign up
 // router.post("/signup", async (req, res) => {
