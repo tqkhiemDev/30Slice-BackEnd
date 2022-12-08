@@ -13,7 +13,7 @@ const { createServer } = require("http");
 const server = createServer(app);
 const io = socketIo(server, { cors: { origin: "*" } });
 
-app.get("/", (req, res) => {
+
   io.on("connection", function (socket) {
     console.log("client connect");
     socket.on("comment", function (data) {
@@ -21,8 +21,7 @@ app.get("/", (req, res) => {
       io.emit("comment", data);
     });
   });
-  res.send("Hello World!");
-});
+ 
 app.use((req, res, next) => {
   req.io = io;
   return next();
@@ -70,7 +69,7 @@ mongoose
   .connect(process.env.MONGO_URL)
   .then(() => {
     console.log("DB Connection Successfull!");
-    app.listen(process.env.PORT, () => {
+    server.listen(process.env.PORT, () => {
       console.log(`Ung dung dang chay voi port ${process.env.PORT}`);
     });
   })
