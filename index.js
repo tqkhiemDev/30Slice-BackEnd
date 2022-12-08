@@ -12,7 +12,13 @@ const socketIo = require("socket.io");
 const { createServer } = require("http");
 const server = createServer(app);
 const io = socketIo(server, { cors: { origin: "*" } });
-
+io.on("connection", function (socket) {
+  console.log("client connect");
+  socket.on("comment", function (data) {
+    console.log(data);
+    io.emit("comment", data);
+  });
+});
 
 // app.use((req, res, next) => {
 //   req.io = io;
@@ -24,13 +30,6 @@ app.use(cors());
 app.use(exp.json());
 // app.use(logger);
 // app.use(errorHandler);
-io.on("connection", function (socket) {
-  console.log("client connect");
-  socket.on("comment", function (data) {
-    console.log(data);
-    io.emit("comment", data);
-  });
-});
 
 const orderRoute = require("./app/routes/order");
 const userRoute = require("./app/routes/user");
