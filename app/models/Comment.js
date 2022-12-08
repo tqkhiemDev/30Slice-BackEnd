@@ -7,6 +7,6 @@ const CommentSchema = new mongoose.Schema({
   Content: { type: String, require: true },
   Parent_Id: { type: String, default: null },
   Is_User_Delete: { type: Boolean, default: false },
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model("comment", CommentSchema);
