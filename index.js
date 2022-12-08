@@ -12,6 +12,13 @@ const socketIo = require("socket.io");
 const { createServer } = require("http");
 const server = createServer(app);
 const io = socketIo(server, { cors: { origin: "*" } });
+io.on("connection", function (socket) {
+  console.log("client connect");
+  socket.on("echo", function (data) {
+    console.log(data);
+    io.emit("comment", data);
+  });
+});
 app.use((req, res, next) => {
   req.io = io;
   return next();
