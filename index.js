@@ -18,8 +18,8 @@ const io = require("socket.io")(server, {
 dotenv.config();
 app.use(cors());
 app.use(exp.json());
-// app.use(logger);
-// app.use(errorHandler);
+app.use(logger);
+app.use(errorHandler);
 
 const orderRoute = require("./app/routes/order");
 const userRoute = require("./app/routes/user");
@@ -76,10 +76,10 @@ io.on("connection", function (socket) {
   });
 });
 
-// mongoose.connection.on("error", (err) => {
-//   console.log(err);
-//   logEvents(
-//     `${err.no}: ${err.code}\t${err.syscall}\t${err.hostname}`,
-//     "mongoErrLog.log"
-//   );
-// });
+mongoose.connection.on("error", (err) => {
+  console.log(err);
+  logEvents(
+    `${err.no}: ${err.code}\t${err.syscall}\t${err.hostname}`,
+    "mongoErrLog.log"
+  );
+});
