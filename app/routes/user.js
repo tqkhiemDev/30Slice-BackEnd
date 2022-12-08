@@ -90,7 +90,7 @@ router.get(
 
 router.get(
   '/getCustomer/:id',
-  // [authJwt.verifyToken, authJwt.isAdmin],
+  [authJwt.verifyToken, authJwt.isAdmin],
   async (req, res) => {
     const id = req.params.id;
     console.log(id);
