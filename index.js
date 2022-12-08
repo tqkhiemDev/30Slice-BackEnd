@@ -8,7 +8,6 @@ const { logger, logEvents } = require("./app/middlewares/auth/logger");
 const errorHandler = require("./app/middlewares/errorHandler");
 
 // Socket.io
-// uisng https for socket.io
 const server = require("http").createServer(app);
 const io = require("socket.io")(server, {
   cors: {
