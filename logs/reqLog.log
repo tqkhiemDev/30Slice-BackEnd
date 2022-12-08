@@ -493,3 +493,4 @@
 20221206	21:15:34	5c87ebcc-a2db-4d25-ae6c-d35691efdc3c	POST	/api/order/momoPay	undefined
 20221206	21:15:44	7a4eaa72-5181-4d61-859e-fb61f54a1f38	POST	/api/order/momoPay	undefined
 20221206	22:03:09	2ef0b0b4-4c85-4394-9b06-5561110acd37	GET	/api/news/getAllNews	undefined
+20221208	23:08:27	797b4a3a-8f9c-4404-84c4-74fe3b8c329d	GET	/	undefined
