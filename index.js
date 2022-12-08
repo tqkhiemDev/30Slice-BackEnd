@@ -8,11 +8,13 @@ const { logger, logEvents } = require("./app/middlewares/auth/logger");
 const errorHandler = require("./app/middlewares/errorHandler");
 
 // Socket.io
-const socketIo = require("socket.io");
-const { createServer } = require("http");
-const server = createServer(app);
-const io = socketIo(server, { cors: { origin: "*" } });
-
+// uisng https for socket.io
+const server = require("https").createServer(app);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+  },
+});
 
 dotenv.config();
 app.use(cors());
