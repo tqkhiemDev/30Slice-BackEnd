@@ -45,8 +45,7 @@ router.post("/", async (req, res) => {
     const newComment = new Comment(req.body);
     const saveCmt = await newComment.save();
     // console.log(saveCmt)
-    req.io.emit("comment", saveCmt);
-    res.status(200).json("thêm thành công!");
+    res.status(200).json(saveCmt);
   } catch (err) {
     res.status(400).json(err);
   }
