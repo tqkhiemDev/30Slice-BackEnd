@@ -218,7 +218,7 @@ router.get("/vnpay_return", async (req, res) => {
       });
       res
         .status(200)
-        .redirect("https://30slice.com/order-success?order_id=" + orderId);
+        .redirect("https://www.30slice.com/order-success?order_id=" + orderId);
 
       //Kiem tra du lieu co hop le khong, cap nhat trang thai don hang va gui ket qua cho VNPAY theo dinh dang duoi
       // res.status(200).json({ RspCode: "00", Message: "success" });
@@ -314,9 +314,9 @@ router.get("/momoPay/return", async (req, res) => {
       });
       res
         .status(200)
-        .redirect("https://30slice.com/order-success?order_id=" + orderId);
+        .redirect("https://www.30slice.com/order-success?order_id=" + orderId);
     } else {
-      res.status(200).redirect("https://30slice.com/order-fail");
+      res.status(200).redirect("https://www.30slice.com/order-fail");
     }
   } catch (err) {
     res.status(400).json(err);
