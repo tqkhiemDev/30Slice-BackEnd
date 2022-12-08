@@ -9,7 +9,7 @@ const errorHandler = require("./app/middlewares/errorHandler");
 
 // Socket.io
 const socketIo = require("socket.io");
-const { createServer } = require("https");
+const { createServer } = require("http");
 const server = createServer(app);
 const io = socketIo(server, { cors: { origin: "*" } });
 
@@ -21,10 +21,10 @@ io.on("connection", function (socket) {
   });
 });
 
-app.use((req, res, next) => {
-  req.io = io;
-  return next();
-});
+// app.use((req, res, next) => {
+//   req.io = io;
+//   return next();
+// });
 // end Socket.io
 dotenv.config();
 app.use(cors());
