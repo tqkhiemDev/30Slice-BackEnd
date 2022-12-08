@@ -9,19 +9,18 @@ const errorHandler = require("./app/middlewares/errorHandler");
 
 // Socket.io
 const socketIo = require("socket.io");
-const { createServer } = require("http");
+const { createServer } = require("https");
 const server = createServer(app);
 const io = socketIo(server, { cors: { origin: "*" } });
 
-
-  io.on("connection", function (socket) {
-    console.log("client connect");
-    socket.on("comment", function (data) {
-      console.log(data);
-      io.emit("comment", data);
-    });
+io.on("connection", function (socket) {
+  console.log("client connect");
+  socket.on("comment", function (data) {
+    console.log(data);
+    io.emit("comment", data);
   });
- 
+});
+
 app.use((req, res, next) => {
   req.io = io;
   return next();
