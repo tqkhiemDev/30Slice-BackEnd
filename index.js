@@ -12,19 +12,8 @@ const socketIo = require("socket.io");
 const { createServer } = require("http");
 const server = createServer(app);
 const io = socketIo(server, { cors: { origin: "*" } });
-io.on("connection", function (socket) {
-  console.log("client connect");
-  socket.on("comment", function (data) {
-    console.log(data);
-    io.emit("comment", data);
-  });
-});
 
-// app.use((req, res, next) => {
-//   req.io = io;
-//   return next();
-// });
-// end Socket.io
+
 dotenv.config();
 app.use(cors());
 app.use(exp.json());
@@ -74,6 +63,17 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
+io.on("connection", function (socket) {
+  console.log("client connect");
+  socket.on("disconnect", function () {
+    console.log("client disconnect");
+  });
+  socket.on("comment", function (data) {
+    console.log(data);
+    io.emit("comment", data);
+  });
+});
 
 // mongoose.connection.on("error", (err) => {
 //   console.log(err);
