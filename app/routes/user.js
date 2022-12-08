@@ -95,7 +95,7 @@ router.get(
     const id = req.params.id;
     console.log(id);
     try {
-      const user = await Customer.find({ _id: id }).populate(
+      const user = await Customer.find({ Id_User: id }).populate(
         'Id_User',
         '-Password'
       );
