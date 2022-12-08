@@ -7,6 +7,16 @@ const Mailjet = require("node-mailjet");
 const { logger, logEvents } = require("./app/middlewares/auth/logger");
 const errorHandler = require("./app/middlewares/errorHandler");
 
+// Socket.io
+const socketIo = require("socket.io");
+const { createServer } = require("http");
+const server = createServer(app);
+const io = socketIo(server, { cors: { origin: "*" } });
+app.use((req, res, next) => {
+  req.io = io;
+  return next();
+});
+// end Socket.io
 dotenv.config();
 app.use(cors());
 app.use(exp.json());

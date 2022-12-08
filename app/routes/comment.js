@@ -15,7 +15,10 @@ router.get("/getAllComment", async (req, res) => {
 router.get("/getCommentByProduct/:id", async (req, res) => {
   const id_product = req.params.id;
   try {
-    const comments = await Comment.find({ Id_Product: id_product }).populate("Id_Customter",{_id:1,Full_Name:1,Role:1,Images:1});
+    const comments = await Comment.find({ Id_Product: id_product }).populate(
+      "Id_Customter",
+      { _id: 1, Full_Name: 1, Role: 1, Images: 1 }
+    );
 
     res.status(200).json(comments);
   } catch (err) {
@@ -40,7 +43,9 @@ router.get("/getCommentByCombo", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const newComment = new Comment(req.body);
-    await newComment.save();
+    const saveCmt = await newComment.save();
+    // console.log(saveCmt)
+    req.io.emit("comment", saveCmt);
     res.status(200).json("thêm thành công!");
   } catch (err) {
     res.status(400).json(err);
