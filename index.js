@@ -33,6 +33,7 @@ const bookingRoute = require("./app/routes/booking");
 const comboRoute = require("./app/routes/combos");
 const userMngt = require("./app/routes/admin/userMngt.route");
 const commentRoute = require("./app/routes/comment");
+const statisticRoute = require("./app/routes/statistic");
 
 app.use("/api/order", orderRoute);
 app.use("/api/user", userRoute);
@@ -46,6 +47,8 @@ app.use("/api/booking", bookingRoute);
 app.use("/api/combo", comboRoute);
 app.use("/api/comment", commentRoute);
 app.use("/api/admin/user-management", userMngt);
+app.use("/api/admin/statistic", statisticRoute);
+
 
 // Refresh token
 const authRoute = require("./app/routes/auth/auth.routes");
