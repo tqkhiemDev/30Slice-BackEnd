@@ -2,3 +2,4 @@ node_modules
 logs/*
 *.log
 logs/reqLog.log
+ecosystem.config.js
