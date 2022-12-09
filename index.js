@@ -33,7 +33,7 @@ const bookingRoute = require("./app/routes/booking");
 const comboRoute = require("./app/routes/combos");
 const userMngt = require("./app/routes/admin/userMngt.route");
 const commentRoute = require("./app/routes/comment");
-const statisticRoute = require("./app/routes/statistic");
+const statisticRoute = require("./app/routes/statistic.routes");
 
 app.use("/api/order", orderRoute);
 app.use("/api/user", userRoute);
