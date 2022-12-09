@@ -1,14 +1,14 @@
 const Order = require('../../models/Order');
 
+const date = new Date();
+
 function getFirstDayPrevious11Month() {
-  const date = new Date();
   const prev11Month = date.getMonth() - 11;
   const firstDay = 1;
   return new Date(date.getFullYear(), prev11Month, firstDay);
 }
 
 exports.getTotalOrdersByMonth = async (req, res) => {
-  const date = new Date();
   try {
     let data = await Order.aggregate([
       {
