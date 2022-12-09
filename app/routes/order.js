@@ -218,7 +218,9 @@ router.get("/vnpay_return", async (req, res) => {
       });
       res
         .status(200)
-        .redirect("https://www.30slice.com/order-success?order_id=" + orderId);
+        .redirect(
+          process.env.URL_CLIENT + "/order-success?order_id=" + orderId
+        );
 
       //Kiem tra du lieu co hop le khong, cap nhat trang thai don hang va gui ket qua cho VNPAY theo dinh dang duoi
       // res.status(200).json({ RspCode: "00", Message: "success" });
@@ -240,8 +242,7 @@ router.post("/momoPay", async (req, res) => {
     let orderId = savedOrder._id;
     let orderInfo = "Thanh toán đơn hàng 30Slice " + orderId;
     let redirectUrl = "https://momo.vn/return";
-    let ipnUrl = (redirectUrl =
-      "https://30slice.online/api/order/momoPay/return");
+    let ipnUrl = (redirectUrl = process.env.URL + "/api/order/momoPay/return");
     let amount = savedOrder.Amount;
     let requestType = "captureWallet";
     let extraData = ""; //pass empty value if your merchant does not have stores
@@ -314,9 +315,11 @@ router.get("/momoPay/return", async (req, res) => {
       });
       res
         .status(200)
-        .redirect("https://www.30slice.com/order-success?order_id=" + orderId);
+        .redirect(
+          process.env.URL_CLIENT + "/order-success?order_id=" + orderId
+        );
     } else {
-      res.status(200).redirect("https://www.30slice.com/order-fail");
+      res.status(200).redirect(process.env.URL_CLIENT + "/order-fail");
     }
   } catch (err) {
     res.status(400).json(err);
