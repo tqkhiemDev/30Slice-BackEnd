@@ -61,7 +61,30 @@ router.get(
   }
 );
 
-//show by category
+//show by category by page and limit
+router.get("/getProductsByCategory", async (req, res) => {
+  const page = req.query.page;
+  const limit = req.query.limit;
+  const Id_Categories = req.query.id;
+  try {
+    const products = await Product.find({
+      Id_Categories: Id_Categories,
+      Is_Show: true,
+    })
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit * 1)
+      .populate("Id_Categories", "Name");
+    const totalItem = await Product.countDocuments({
+      Id_Categories: Id_Categories,
+    });
+    const totalPage = Math.ceil(totalItem / limit);
+    res.status(200).json({ totalItem, totalPage, products });
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
 router.get("/getProductsByCategory/:id", async (req, res) => {
   const Id_Categories = req.params.id;
   try {
