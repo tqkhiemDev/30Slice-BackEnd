@@ -8,7 +8,7 @@ const NewsSchema = new mongoose.Schema(
     Desc : {type : String, require : true},
     Is_Hot : {type : Boolean ,  default : false},
     Content: { type: String, required: true }, 
-    Create_By: {  type: mongoose.Schema.Types.ObjectId, ref: 'logins'  },
+    Create_By: {  type: mongoose.Schema.Types.ObjectId, ref: 'login'  },
     Is_Show: { type: Boolean, default: true },
     Views: { type: Number, default: 0 },
   },

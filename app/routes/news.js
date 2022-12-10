@@ -78,7 +78,11 @@ router.get("/getAllNewsByUser", async (req, res) => {
 //show 1
 router.get("/getOneNews/:id", async (req, res) => {
   try {
-    const news = await News.findById(req.params.id);
+    const news = await News.findById(req.params.id).populate("Create_By","Full_Name");
+    await News.findByIdAndUpdate(req.params.id, {
+      $set: { Views: news.Views + 1 },
+    });
+
     res.status(200).json(news);
   } catch (err) {
     res.status(400).json(err);
