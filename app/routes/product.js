@@ -1,6 +1,6 @@
 const Product = require("../models/Product");
 const { authJwt } = require("../middlewares/auth");
-
+const Category = require("../models/Categories");
 const router = require("express").Router();
 
 //them
@@ -78,9 +78,15 @@ router.get("/getProductsByCategory", async (req, res) => {
     const totalItem = await Product.countDocuments({
       Id_Categories: Id_Categories,
     });
+    // get categories name
+    const categories = await Category.findById(Id_Categories);
+    const Catename = categories.Name;
+
+
     const totalPage = Math.ceil(totalItem / limit);
-    res.status(200).json({ totalItem, totalPage, products });
+    res.status(200).json({ totalItem, totalPage,Catename, products });
   } catch (err) {
+    console.log(err)
     res.status(400).json(err);
   }
 });
