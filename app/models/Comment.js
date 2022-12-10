@@ -6,7 +6,6 @@ const CommentSchema = new mongoose.Schema({
   Id_Combo: { type: mongoose.Schema.Types.ObjectId, ref: "combo" },
   Content: { type: String, require: true },
   Parent_Id: { type: String, default: null },
-  Is_User_Delete: { type: Boolean, default: false },
 }, { timestamps: true });
 
 module.exports = mongoose.model("comment", CommentSchema);
