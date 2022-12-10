@@ -3,3 +3,4 @@ logs
 *.log
 logs/reqLog.log
 ecosystem.config.js
+.DS_Store
