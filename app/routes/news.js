@@ -31,7 +31,7 @@ router.get("/getAllNews", async (req, res) => {
           },
         },
       },
-    ]);
+    ]).sort({ Create_At: -1 });
     res.status(200).json(news);
   } catch (err) {
     res.status(400).json(err);
