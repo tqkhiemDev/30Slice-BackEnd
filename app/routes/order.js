@@ -114,9 +114,10 @@ router.post("/", async (req, res) => {
     const products = savedOrder.Products;
     products.map(async (product) => {
       await Product.findByIdAndUpdate(product._id, {
-        $inc: { InStock: -product.Quantity },
-        $inc: { Saled: +product.Quantity },
-
+        $inc: {
+          InStock: -product.Quantity,
+          Saled: +product.Quantity,
+        },
       });
     });
     res.status(200).json(savedOrder);
@@ -182,9 +183,10 @@ router.post("/orderVnpay", async (req, res) => {
     const products = savedOrder.Products;
     products.map(async (product) => {
       await Product.findByIdAndUpdate(product._id, {
-        $inc: { InStock: -product.Quantity },
-        $inc: { Saled: +product.Quantity },
-
+        $inc: {
+          InStock: -product.Quantity,
+          Saled: +product.Quantity,
+        },
       });
     });
     let ipAddr =
@@ -269,9 +271,10 @@ router.post("/momoPay", async (req, res) => {
     const products = savedOrder.Products;
     products.map(async (product) => {
       await Product.findByIdAndUpdate(product._id, {
-        $inc: { InStock: -product.Quantity },
-        $inc: { Saled: +product.Quantity },
-
+        $inc: {
+          InStock: -product.Quantity,
+          Saled: +product.Quantity,
+        },
       });
     });
     let partnerCode = "MOMO";
