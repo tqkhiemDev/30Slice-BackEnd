@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Order = require("../models/Order");
+const Product = require("../models/Product");
 const querystring = require("qs");
 const dateFormat = require("dateformat");
 const mongoose = require("mongoose");
@@ -110,6 +111,14 @@ router.post("/", async (req, res) => {
   const newOrder = new Order(req.body);
   try {
     const savedOrder = await newOrder.save();
+    const products = savedOrder.Products;
+    products.map(async (product) => {
+      await Product.findByIdAndUpdate(product._id, {
+        $inc: { InStock: -product.Quantity },
+        $inc: { Saled: +product.Quantity },
+
+      });
+    });
     res.status(200).json(savedOrder);
   } catch (err) {
     res.status(400).json(err);
@@ -170,6 +179,14 @@ router.post("/orderVnpay", async (req, res) => {
   const newOrder = new Order(req.body);
   try {
     const savedOrder = await newOrder.save();
+    const products = savedOrder.Products;
+    products.map(async (product) => {
+      await Product.findByIdAndUpdate(product._id, {
+        $inc: { InStock: -product.Quantity },
+        $inc: { Saled: +product.Quantity },
+
+      });
+    });
     let ipAddr =
       req.headers["x-forwarded-for"] ||
       req.connection.remoteAddress ||
@@ -249,6 +266,14 @@ router.post("/momoPay", async (req, res) => {
   const newOrder = new Order(req.body);
   try {
     const savedOrder = await newOrder.save();
+    const products = savedOrder.Products;
+    products.map(async (product) => {
+      await Product.findByIdAndUpdate(product._id, {
+        $inc: { InStock: -product.Quantity },
+        $inc: { Saled: +product.Quantity },
+
+      });
+    });
     let partnerCode = "MOMO";
     let accessKey = "F8BBA842ECF85";
     let secretkey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
