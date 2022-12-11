@@ -129,6 +129,20 @@ router.put("/DeleteOrderByUser", async (req, res) => {
   }
 });
 
+//update 
+router.put("/", async (req, res) => {
+  try {
+    await Order.findByIdAndUpdate(
+      req.body._id,
+      { $set: req.body },
+      { new: true }
+    );
+    res.status(200).json("sửa thành công!");
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
 //admin hidden
 router.put("/DeleteOrderByAdmin", async (req, res) => {
   try {
