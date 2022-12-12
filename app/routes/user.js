@@ -109,36 +109,12 @@ router.get(
 // customer sign up
 router.post("/signup", async (req, res) => {
   try {
-    const isSignUp = await Customer.findOne({
+    const dataCustomer = await Login.findOne({
       Phone: req.body.phone,
-      isSignUp: false,
+      Role: "customer",
     });
-    console.log(isSignUp);
-    if (isSignUp === false) {
-      const user = await Login.findByIdAndUpdate(
-        isSignUp.Id_User,
-        {
-          $set: {
-            Username: req.body.username,
-            Password: bcrypt.hashSync(req.body.password, 8),
-            Email: req.body.email,
-            Full_Name: req.body.full_name,
-            isSignUp: true,
-          },
-        },
-        { new: true }
-      );
-      const customer = await Customer.findByIdAndUpdate(
-        isSignUp._id,
-        {
-          $set: {
-            isSignUp: true,
-          },
-        },
-        { new: true }
-      );
-      res.status(201).json(user);
-    } else {
+    console.log(dataCustomer)
+    if (!dataCustomer) {
       const newUser = new Login({
         Username: req.body.username,
         Password: bcrypt.hashSync(req.body.password, 8),
@@ -153,6 +129,37 @@ router.post("/signup", async (req, res) => {
       });
       const customer = await newCustomer.save();
       res.status(201).json(user);
+    } else {
+      const isSignUp = await Customer.findOne({ Id_User: dataCustomer._id });
+      console.log(isSignUp)
+      if (isSignUp.isSignUp === false) {
+        const user = await Login.findByIdAndUpdate(
+          isSignUp.Id_User,
+          {
+            $set: {
+              Username: req.body.username,
+              Password: bcrypt.hashSync(req.body.password, 8),
+              Email: req.body.email,
+              Full_Name: req.body.full_name,
+              isSignUp: true,
+            },
+          },
+          { new: true }
+        );
+        const customer = await Customer.findByIdAndUpdate(
+          isSignUp._id,
+          {
+            $set: {
+              isSignUp: true,
+            },
+          },
+          { new: true }
+        );
+        console.log(customer)
+        res.status(201).json(user);
+      }else{
+        res.status(200).json({message:"Số điện thoại này đã được đăng ký"})
+      }
     }
   } catch (err) {
     if (err.code == 11000) {
