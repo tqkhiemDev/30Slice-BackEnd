@@ -265,7 +265,7 @@ router.get("/vnpay_return", async (req, res) => {
       });
       res
         .status(200)
-        .redirect(process.env.URL_CLIENT + "/order-fail");
+        .redirect(process.env.URL_CLIENT + "/");
     }
   } catch (err) {
     res.status(400).json(err);
@@ -373,7 +373,7 @@ router.get("/momoPay/return", async (req, res) => {
         Status: "failed",
       });
       console.log(a)
-      res.status(200).redirect(process.env.URL_CLIENT + "/order-fail");
+      res.status(200).redirect(process.env.URL_CLIENT + "/");
     }
   } catch (err) {
     res.status(400).json(err);
