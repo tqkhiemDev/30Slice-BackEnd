@@ -139,7 +139,7 @@ router.put("/DeleteOrderByUser", async (req, res) => {
   }
 });
 
-//update 
+//update
 router.put("/", async (req, res) => {
   try {
     await Order.findByIdAndUpdate(
@@ -242,8 +242,9 @@ router.get("/vnpay_return", async (req, res) => {
     let signData = querystring.stringify(vnp_Params, { encode: false });
     let hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA512, secretKey);
     let signed = hmac.update(signData).finalize().toString(CryptoJS.enc.Hex);
-    if (secureHash === signed) {
-      let orderId = vnp_Params["vnp_TxnRef"];
+    let orderId = vnp_Params["vnp_TxnRef"];
+
+    if (secureHash === signed && vnp_Params["vnp_ResponseCode"] == "00") {
       let rspCode = vnp_Params["vnp_ResponseCode"];
       console.log(orderId);
       const order = await Order.findByIdAndUpdate(orderId, {
@@ -258,7 +259,12 @@ router.get("/vnpay_return", async (req, res) => {
       //Kiem tra du lieu co hop le khong, cap nhat trang thai don hang va gui ket qua cho VNPAY theo dinh dang duoi
       // res.status(200).json({ RspCode: "00", Message: "success" });
     } else {
-      res.status(200).json({ RspCode: "97", Message: "Fail checksum" });
+      await Order.findByIdAndUpdate(orderId, {
+        Payment_Status: "failed",
+      });
+      res
+        .status(200)
+        .redirect(process.env.URL_CLIENT + "/order-fail");
     }
   } catch (err) {
     res.status(400).json(err);
@@ -361,6 +367,9 @@ router.get("/momoPay/return", async (req, res) => {
           process.env.URL_CLIENT + "/order-success?order_id=" + orderId
         );
     } else {
+      await Order.findByIdAndUpdate(orderId, {
+        Payment_Status: "failed",
+      });
       res.status(200).redirect(process.env.URL_CLIENT + "/order-fail");
     }
   } catch (err) {
