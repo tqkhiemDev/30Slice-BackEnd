@@ -261,6 +261,7 @@ router.get("/vnpay_return", async (req, res) => {
     } else {
       await Order.findByIdAndUpdate(orderId, {
         Payment_Status: "failed",
+        Status: "failed",
       });
       res
         .status(200)
@@ -369,6 +370,7 @@ router.get("/momoPay/return", async (req, res) => {
     } else {
       await Order.findByIdAndUpdate(orderId, {
         Payment_Status: "failed",
+        Status: "failed",
       });
       res.status(200).redirect(process.env.URL_CLIENT + "/order-fail");
     }
