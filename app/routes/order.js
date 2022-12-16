@@ -368,10 +368,11 @@ router.get("/momoPay/return", async (req, res) => {
           process.env.URL_CLIENT + "/order-success?order_id=" + orderId
         );
     } else {
-      await Order.findByIdAndUpdate(orderId, {
+     const a = await Order.findByIdAndUpdate(orderId, {
         Payment_Status: "failed",
         Status: "failed",
       });
+      console.log(a)
       res.status(200).redirect(process.env.URL_CLIENT + "/order-fail");
     }
   } catch (err) {
