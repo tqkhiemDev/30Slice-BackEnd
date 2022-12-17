@@ -388,7 +388,8 @@ router.get("/getOrders", async (req, res) => {
   try {
     if (name) {
       const orders = await Order.find({
-        Receiver: { $regex: name, $options: "i" }
+        Receiver: { $regex: name, $options: "i" },
+        IsAdmin_Delete : true
       })
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
@@ -404,7 +405,7 @@ router.get("/getOrders", async (req, res) => {
     } else {
       const totalItem = await Order.countDocuments();
       const totalPage = Math.ceil(totalItem / limit);
-      const orders = await Order.find()
+      const orders = await Order.find({IsAdmin_Delete : true})
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
         .limit(limit * 1);
