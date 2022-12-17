@@ -379,4 +379,39 @@ router.get("/momoPay/return", async (req, res) => {
     res.status(400).json(err);
   }
 });
+
+//phan trang order
+router.get("/getOrders", async (req, res) => {
+  const page = req.query.page;
+  const limit = req.query.limit;
+  const name = decodeURI(req.query.search);
+  try {
+    if (name) {
+      const orders = await Order.find({
+        Name: { $regex: name, $options: "i" }
+      })
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit * 1);
+
+      const totalItem = await Order.countDocuments({
+        Name: { $regex: name, $options: "i" },
+      });
+
+      const totalPage = Math.ceil(totalItem / limit);
+
+      res.status(200).json({ totalItem, totalPage, orders });
+    } else {
+      const totalItem = await Order.countDocuments();
+      const totalPage = Math.ceil(totalItem / limit);
+      const orders = await Order.find()
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit * 1);
+      res.status(200).json({ totalItem, totalPage, orders });
+    }
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
 module.exports = router;
