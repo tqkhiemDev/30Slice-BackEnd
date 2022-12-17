@@ -388,14 +388,14 @@ router.get("/getOrders", async (req, res) => {
   try {
     if (name) {
       const orders = await Order.find({
-        Name: { $regex: name, $options: "i" }
+        Receiver: { $regex: name, $options: "i" }
       })
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
         .limit(limit * 1);
 
       const totalItem = await Order.countDocuments({
-        Name: { $regex: name, $options: "i" },
+        Receiver: { $regex: name, $options: "i" },
       });
 
       const totalPage = Math.ceil(totalItem / limit);
