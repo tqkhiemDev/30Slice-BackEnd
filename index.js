@@ -49,7 +49,7 @@ app.use("/api/comment", commentRoute);
 app.use("/api/admin/user-management", userMngt);
 app.use("/api/admin/statistic", statisticRoute);
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Hello World! Đây là server api");
 });
 
 // Refresh token
