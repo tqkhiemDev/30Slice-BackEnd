@@ -11,7 +11,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3 #checkout code from repository, so we code downloaded in runner.
       - uses: actions/setup-node@v3 #setup nodejs in our runner
-      - run: pm2 -V #check pm2 version
-      - run: pm2 list #check pm2 list
       #running pm2 in mode cluster and --watch set to auto restart if index.js have changes.
       - run: pm2 start index.js --watch -i max
