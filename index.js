@@ -48,7 +48,9 @@ app.use("/api/combo", comboRoute);
 app.use("/api/comment", commentRoute);
 app.use("/api/admin/user-management", userMngt);
 app.use("/api/admin/statistic", statisticRoute);
-
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
 // Refresh token
 const authRoute = require("./app/routes/auth/auth.routes");
