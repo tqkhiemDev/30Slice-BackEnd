@@ -1,4 +1,7 @@
 const Order = require('../../models/Order');
+const Product = require('../../models/Product');
+const Login = require('../../models/Login');
+const Booking = require('../../models/Booking');
 
 const date = new Date();
 
@@ -8,7 +11,7 @@ function getFirstDayPrevious11Month() {
   return new Date(date.getFullYear(), prev11Month, firstDay);
 }
 
-exports.getTotalOrdersByMonth = async (req, res) => {
+exports.getTotalOrderByMonth = async (req, res) => {
   try {
     let data = await Order.aggregate([
       {
@@ -83,6 +86,60 @@ exports.getTotalOrdersByMonth = async (req, res) => {
     }
 
     res.status(200).json(dt);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+exports.getTotalProduct = async (req, res) => {
+  try {
+    let data = await Product.countDocuments();
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+exports.getTotalOrder = async (req, res) => {
+  try {
+    let data = await Order.countDocuments();
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+exports.getTotalCustomer = async (req, res) => {
+  try {
+    let data = await Login.countDocuments({ Role: 'customer' });
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+exports.getTotalStylist = async (req, res) => {
+  try {
+    let data = await Login.countDocuments({ Role: 'styleList' });
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+exports.getTotalBooking = async (req, res) => {
+  try {
+    let data = await Booking.countDocuments({ Status: 'pending' });
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+};
+
+exports.getAllOrders = async (req, res) => {
+  try {
+    let data = await Order.find().sort({ createdAt: -1 }).limit(5);
+    res.status(200).json(data);
   } catch (err) {
     res.status(400).json(err);
   }
